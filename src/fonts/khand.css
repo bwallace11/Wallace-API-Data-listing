@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Khand
+* Designed by: Satya Rajpurohit
+* URL: https://www.fontshare.com/fonts/khand
+* © 2026 Indian Type Foundry
+*
+* Khand SemiBold 
+
+*
+*/
+@font-face {
+  font-family: 'Khand-SemiBold';
+  src: url('../fonts/Khand-SemiBold.woff2') format('woff2'),
+       url('../fonts/Khand-SemiBold.woff') format('woff'),
+       url('../fonts/Khand-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+

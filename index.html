@@ -6,52 +6,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Criminal Analysis Platform</title>
 
-    <!-- Font imports -->
+    <!-- Switzer + General Sans via Fontshare CDN -->
+    <link href="https://api.fontshare.com/v2/css?f[]=switzer@600,700&f[]=general-sans@400,500&display=swap" rel="stylesheet">
+
+    <!-- Local font fallbacks -->
     <link rel="stylesheet" href="/src/fonts/general-sans.css">
     <link rel="stylesheet" href="/src/fonts/khand.css">
 
-    <!-- Compiled CSS file -->
     <link rel="stylesheet" href="/src/style.css">
-
-    <!-- Transpiled JS -->
     <script src="/src/script.js" type="module" defer></script>
   </head>
   <body>
 
     <header class="site-header">
       <div class="header-inner">
+
         <div class="header-brand">
-          <span class="brand-tag">DATASET</span>
-          <h1 class="brand-title">Criminal<br>Analysis<br>Platform</h1>
+          <div class="brand-eyebrow">
+            <span class="dot"></span>
+            <span>LIVE DATASET · WIKIPEDIA API</span>
+          </div>
+          <h1 class="brand-title">Criminal Analysis<br>Platform</h1>
+          <p class="header-desc">Statistical profiling of documented serial homicide cases sourced from public Wikipedia records.</p>
         </div>
-        <div class="header-meta">
-          <p class="header-desc">Statistical analysis of documented serial homicide cases. Data sourced from public records and Wikipedia.</p>
-          <div class="stat-row">
-            <div class="stat-pill"><span class="stat-num" id="totalCount">—</span><span>Cases Loaded</span></div>
-            <div class="stat-pill"><span class="stat-num" id="totalVictims">—</span><span>Total Victims</span></div>
+
+        <div class="header-stats">
+          <div class="stat-card">
+            <span class="stat-val" id="totalCount">—</span>
+            <span class="stat-label">Cases Loaded</span>
+          </div>
+          <div class="stat-card accent">
+            <span class="stat-val" id="totalVictims">—</span>
+            <span class="stat-label">Documented Victims</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-val" id="visibleCount">—</span>
+            <span class="stat-label">Matching Filters</span>
           </div>
         </div>
+
       </div>
     </header>
 
     <div class="controls-bar">
       <div class="controls-inner">
+
+        <div class="filter-group">
+          <label class="ctrl-label" for="searchInput">SEARCH NAME</label>
+          <input type="text" class="ctrl-input" id="searchInput" placeholder="Search by name…" />
+        </div>
+
+        <div class="filter-group">
+          <label class="ctrl-label" for="minVictimsInput">MIN. KILL COUNT</label>
+          <div class="num-input-wrap">
+            <input
+              type="number"
+              class="ctrl-input num-input"
+              id="minVictimsInput"
+              placeholder="0"
+              min="0"
+              max="9999"
+            />
+            <span class="num-suffix">kills or more</span>
+          </div>
+        </div>
+
         <div class="filter-group">
           <label class="ctrl-label">SORT BY</label>
           <div class="btn-group">
-            <button class="ctrl-btn active" data-sort="victims">Victim Count</button>
-            <button class="ctrl-btn" data-sort="name">Name A–Z</button>
+            <button class="ctrl-btn active" data-sort="victims">↓ Kill Count</button>
+            <button class="ctrl-btn" data-sort="name">A–Z Name</button>
           </div>
         </div>
+
         <div class="filter-group">
-          <label class="ctrl-label">SEARCH</label>
-          <input type="text" class="ctrl-input" id="searchInput" placeholder="Search by name…" />
+          <label class="ctrl-label">VIEW</label>
+          <div class="btn-group">
+            <button class="view-btn active" data-view="grid" title="Grid">⊞ Grid</button>
+            <button class="view-btn" data-view="list" title="List">☰ List</button>
+          </div>
         </div>
-        <div class="filter-group">
-          <label class="ctrl-label">MIN VICTIMS</label>
-          <input type="range" id="victimFilter" min="0" max="300" value="0" class="ctrl-range" />
-          <span class="range-val" id="rangeVal">0+</span>
-        </div>
+
       </div>
     </div>
 
@@ -63,7 +98,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>Data aggregated from Wikipedia public API. For educational and analytical purposes only.</p>
+      <p>Data aggregated from the Wikipedia REST API · For educational and analytical purposes only · Not affiliated with any law enforcement agency</p>
     </footer>
 
   </body>
