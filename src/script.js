@@ -1,7 +1,37 @@
-console.log('👍 Criminal Case Archive — JS Connected');
+console.log('👍 CASE ARCHIVE — JS Connected');
 
-// ── Killer list — removed those with no usable Wikipedia data ──
-// (Javed Iqbal, Pedro López, Boston Strangler unresolved, etc.)
+// ── STATIC OVERRIDES ──────────────────────────────────────────
+// These records have hand-curated data that will merge/override Wikipedia
+const STATIC_RECORDS = {
+  "Dennis Nilsen": {
+    name:               "Dennis Nilsen",
+    nickname:           "The Muswell Hill Murderer",
+    country:            "United Kingdom",
+    years_active:       "1978–1983",
+    confirmed_victims:  15,
+    method:             "Strangulation, drowning",
+    description:        "Scottish serial killer who murdered young men in London. He kept victims' bodies in his home before disposing of them.",
+    wikipedia_url:      "https://en.wikipedia.org/wiki/Dennis_Nilsen",
+    image:              "https://upload.wikimedia.org/wikipedia/en/5/5b/Dennis_Nilsen_police_photo.jpg",
+    status:             "DECEASED", // died in prison 2018
+    death_date:         "2018",
+  },
+  "Peter Kürten": {
+    name:               "Peter Kürten",
+    nickname:           "The Vampire of Düsseldorf",
+    country:            "Germany",
+    years_active:       "1913–1930",
+    confirmed_victims:  9,
+    method:             "Stabbing, strangulation",
+    description:        "German serial killer active primarily in Düsseldorf. He committed multiple murders and assaults and was executed in 1931.",
+    wikipedia_url:      "https://en.wikipedia.org/wiki/Peter_K%C3%BCrten",
+    image:              "https://upload.wikimedia.org/wikipedia/commons/4/45/Peter_K%C3%BCrten.jpg",
+    status:             "EXECUTED",
+    death_date:         "1931",
+  },
+};
+
+// ── KILLER LIST ───────────────────────────────────────────────
 const KILLERS = [
   "Ted Bundy",
   "Jeffrey Dahmer",
@@ -45,131 +75,193 @@ const KILLERS = [
   "Mikhail Popkov",
   "Jack the Ripper",
   "Zodiac Killer",
+  // Static-only additions:
+  "Dennis Nilsen",
+  "Peter Kürten",
 ];
 
-// ── SVG Crime Scene Tape Placeholder ─────────────────────────
-const NO_IMAGE_SVG = `
-<div class="no-image-placeholder">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200">
-    <rect width="360" height="200" fill="#E0DDD7"/>
-    <!-- diagonal hatching -->
-    <defs>
-      <pattern id="diag" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
-        <rect width="24" height="24" fill="#E0DDD7"/>
-        <rect y="10" width="24" height="4" fill="#D4D0CA"/>
-      </pattern>
-    </defs>
-    <rect width="360" height="200" fill="url(#diag)"/>
-    <!-- tape band 1 -->
-    <g transform="rotate(-6,180,80)">
-      <rect x="-40" y="55" width="460" height="32" fill="#C9B458"/>
-      <text font-family="'Courier New',monospace" font-size="10" font-weight="900" fill="#1E1E1E" letter-spacing="3" y="76" x="-20">
-        DO NOT CROSS · NO PICTURE ON FILE · DO NOT CROSS · NO PICTURE ON FILE ·
-      </text>
-    </g>
-    <!-- tape band 2 -->
-    <g transform="rotate(5,180,140)">
-      <rect x="-40" y="120" width="460" height="32" fill="#C9B458"/>
-      <text font-family="'Courier New',monospace" font-size="10" font-weight="900" fill="#1E1E1E" letter-spacing="3" y="141" x="-20">
-        · NO PICTURE ON FILE · DO NOT CROSS · NO PICTURE ON FILE · DO NOT CROSS
-      </text>
-    </g>
-    <!-- label -->
-    <rect x="120" y="172" width="120" height="18" rx="2" fill="rgba(30,30,30,0.75)"/>
-    <text x="180" y="185" text-anchor="middle" font-family="monospace" font-size="8" fill="#9CA3AF" letter-spacing="2">NO IMAGE ON FILE</text>
-  </svg>
-</div>`;
+// ── STATUS LOOKUP ─────────────────────────────────────────────
+// Based on known facts; Wikipedia extract will confirm/supplement
+const KNOWN_STATUS = {
+  "Ted Bundy":            { status: "EXECUTED",     death_date: "1989" },
+  "Jeffrey Dahmer":       { status: "DECEASED",     death_date: "1994" },
+  "John Wayne Gacy":      { status: "EXECUTED",     death_date: "1994" },
+  "Gary Ridgway":         { status: "IN PRISON" },
+  "Andrei Chikatilo":     { status: "EXECUTED",     death_date: "1994" },
+  "Harold Shipman":       { status: "DECEASED",     death_date: "2004" },
+  "Aileen Wuornos":       { status: "EXECUTED",     death_date: "2002" },
+  "Richard Ramirez":      { status: "DECEASED",     death_date: "2013" },
+  "Edmund Kemper":        { status: "IN PRISON" },
+  "Dennis Rader":         { status: "IN PRISON" },
+  "Albert Fish":          { status: "EXECUTED",     death_date: "1936" },
+  "David Berkowitz":      { status: "IN PRISON" },
+  "Samuel Little":        { status: "DECEASED",     death_date: "2020" },
+  "Rodney Alcala":        { status: "DECEASED",     death_date: "2021" },
+  "H.H. Holmes":          { status: "EXECUTED",     death_date: "1896" },
+  "Robert Pickton":       { status: "IN PRISON" },
+  "Dean Corll":           { status: "DECEASED",     death_date: "1973" },
+  "Ed Gein":              { status: "DECEASED",     death_date: "1984" },
+  "Alexander Pichushkin": { status: "IN PRISON" },
+  "Paul Bernardo":        { status: "IN PRISON" },
+  "Joachim Kroll":        { status: "DECEASED",     death_date: "1991" },
+  "Peter Sutcliffe":      { status: "DECEASED",     death_date: "2020" },
+  "Ian Brady":            { status: "DECEASED",     death_date: "2017" },
+  "Anatoly Onoprienko":   { status: "DECEASED",     death_date: "2013" },
+  "Gary Heidnik":         { status: "EXECUTED",     death_date: "1999" },
+  "Fred West":            { status: "DECEASED",     death_date: "1995" },
+  "Arthur Shawcross":     { status: "DECEASED",     death_date: "2008" },
+  "Wayne Williams":       { status: "IN PRISON" },
+  "Richard Cottingham":   { status: "IN PRISON" },
+  "Randy Kraft":          { status: "IN PRISON" },
+  "Robert Hansen":        { status: "DECEASED",     death_date: "2014" },
+  "Joseph DeAngelo":      { status: "IN PRISON" },
+  "Charles Cullen":       { status: "IN PRISON" },
+  "Marc Dutroux":         { status: "IN PRISON" },
+  "Bruce McArthur":       { status: "IN PRISON" },
+  "William Bonin":        { status: "EXECUTED",     death_date: "1996" },
+  "Donald Gaskins":       { status: "EXECUTED",     death_date: "1991" },
+  "David Parker Ray":     { status: "DECEASED",     death_date: "2002" },
+  "Tsutomu Miyazaki":     { status: "EXECUTED",     death_date: "2008" },
+  "Mikhail Popkov":       { status: "IN PRISON" },
+  "Jack the Ripper":      { status: "UNIDENTIFIED" },
+  "Zodiac Killer":        { status: "UNIDENTIFIED" },
+  "Dennis Nilsen":        { status: "DECEASED",     death_date: "2018" },
+  "Peter Kürten":         { status: "EXECUTED",     death_date: "1931" },
+};
 
-// ── State ─────────────────────────────────────────────────────
-let allData  = [];
-let sortMode = 'name';
-let searchQ  = '';
-let letterQ  = 'ALL';
-let viewMode = 'grid';
-
-// ── Victim count extraction ───────────────────────────────────
-// Looks for patterns like "killed X", "murdered X", "X victims", "at least X"
-// Avoids matching years (4-digit numbers 1800–2099)
-function extractVictimCount(text) {
-  if (!text) return null;
-
-  // Specific victim-count phrases (high confidence)
-  const patterns = [
-    /(?:killed|murdered|claimed|confessed to|convicted of(?:\s+killing)?|responsible for)(?:\s+at\s+least)?\s+(\d{1,3})\s+(?:people|women|men|children|victims|people)/i,
-    /(\d{1,3})\s+(?:confirmed\s+)?(?:murders?|victims?|homicides?|killings?)/i,
-    /(?:at\s+least|more\s+than)\s+(\d{1,3})\s+(?:people|victims?|murders?)/i,
-  ];
-
-  for (const pat of patterns) {
-    const m = text.match(pat);
-    if (m) {
-      const n = parseInt(m[1], 10);
-      // sanity check: 1–999
-      if (n >= 1 && n <= 999) return n;
-    }
-  }
-  return null;
-}
-
-// ── Active years extraction ───────────────────────────────────
-function extractYears(text) {
-  if (!text) return null;
-
-  // "active from 1974 to 1978" or "between 1974 and 1978"
-  const range = text.match(/(?:from|between|active)\s+(1[89]\d{2}|20[012]\d)\s+(?:to|and|until|–|-)\s+(1[89]\d{2}|20[012]\d)/i);
-  if (range) return `${range[1]}–${range[2]}`;
-
-  // "operated between 1974–1978"
-  const dash = text.match(/(1[89]\d{2})\s*[–\-]\s*(1[89]\d{2}|20[012]\d)/);
-  if (dash) return `${dash[1]}–${dash[2]}`;
-
-  // single year mentioned prominently
-  const single = text.match(/in\s+(1[89]\d{2}|20[012]\d)/i);
-  if (single) return single[1];
-
-  return null;
-}
-
-// ── Fetch helpers ─────────────────────────────────────────────
+// ── HELPERS ───────────────────────────────────────────────────
 function escHtml(s) {
   return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+function extractVictimCount(text) {
+  if (!text) return null;
+  const patterns = [
+    /(?:killed|murdered|claimed|confessed to|convicted of(?:\s+killing)?|responsible for)(?:\s+at\s+least)?\s+(\d{1,3})\s+(?:people|women|men|children|victims?)/i,
+    /(\d{1,3})\s+(?:confirmed\s+)?(?:murders?|victims?|homicides?|killings?)/i,
+    /(?:at\s+least|more\s+than)\s+(\d{1,3})\s+(?:people|victims?|murders?)/i,
+  ];
+  for (const p of patterns) {
+    const m = text.match(p);
+    if (m) { const n = parseInt(m[1], 10); if (n >= 1 && n <= 999) return n; }
+  }
+  return null;
+}
+
+function extractYears(text) {
+  if (!text) return null;
+  const range = text.match(/(?:from|between|active)\s+(1[89]\d{2}|20[012]\d)\s+(?:to|and|until|–|-)\s+(1[89]\d{2}|20[012]\d)/i);
+  if (range) return `${range[1]}–${range[2]}`;
+  const dash = text.match(/(1[89]\d{2})\s*[–\-]\s*(1[89]\d{2}|20[012]\d)/);
+  if (dash) return `${dash[1]}–${dash[2]}`;
+  return null;
+}
+
+function extractCountry(text) {
+  const countries = [
+    'American','British','Canadian','German','Russian','Australian',
+    'French','Italian','Scottish','English','Ukrainian','Colombian',
+    'Pakistani','Belgian','Japanese','South African'
+  ];
+  for (const c of countries) {
+    if (text.includes(c)) return c;
+  }
+  return null;
+}
+
+function extractNickname(text) {
+  // Looks for patterns like "known as "The X"" or "nicknamed "X""
+  const m = text.match(/(?:known as|nicknamed?|called)\s+[""]([^"""]+)["""]/i);
+  return m ? m[1] : null;
+}
+
+function extractMethod(text) {
+  const methods = [
+    ['Strangulation', /strangl/i],
+    ['Shooting',      /shot|shoot|firearm|gun/i],
+    ['Stabbing',      /stabb|knife|bludgeon/i],
+    ['Drowning',      /drown/i],
+    ['Poisoning',     /poison/i],
+    ['Hanging',       /hang/i],
+  ];
+  const found = [];
+  for (const [label, re] of methods) {
+    if (re.test(text) && found.length < 2) found.push(label);
+  }
+  return found.length ? found.join(', ') : null;
+}
+
+// ── STATE ─────────────────────────────────────────────────────
+let allData    = [];
+let sortMode   = 'name';
+let searchQ    = '';
+let letterQ    = 'ALL';
+let statusQ    = 'ALL';
+let viewMode   = 'grid';
+let caseIndex  = 0;
+
+// ── FETCH ─────────────────────────────────────────────────────
 async function fetchKiller(name) {
+  // If we have a fully static record, skip the API call
+  if (STATIC_RECORDS[name] && STATIC_RECORDS[name].image) {
+    const s = STATIC_RECORDS[name];
+    const st = KNOWN_STATUS[name] || {};
+    return { ...s, status: st.status || s.status || 'UNKNOWN', death_date: st.death_date || s.death_date || null };
+  }
+
   const res = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`
   );
   const d = await res.json();
-
-  // Skip if Wikipedia gives us nothing useful (disambiguation, missing, etc.)
   if (!d.extract || d.type === 'disambiguation' || d.extract.length < 80) return null;
 
+  const st = KNOWN_STATUS[name] || {};
+  const override = STATIC_RECORDS[name] || {};
+
   return {
-    name,
-    victims:      extractVictimCount(d.extract),
-    years_active: extractYears(d.extract),
-    image:        d.thumbnail?.source || null,
-    description:  d.extract,
-    wikipedia_url: d.content_urls?.desktop?.page || null,
+    name:         override.name    || name,
+    nickname:     override.nickname || extractNickname(d.extract),
+    country:      override.country  || extractCountry(d.extract),
+    years_active: override.years_active || extractYears(d.extract),
+    confirmed_victims: override.confirmed_victims || extractVictimCount(d.extract),
+    method:       override.method  || extractMethod(d.extract),
+    image:        override.image   || d.thumbnail?.source || null,
+    description:  override.description || d.extract,
+    wikipedia_url: override.wikipedia_url || d.content_urls?.desktop?.page || null,
+    status:       st.status   || override.status || 'UNKNOWN',
+    death_date:   st.death_date || override.death_date || null,
   };
 }
 
-// ── Load ──────────────────────────────────────────────────────
 async function loadData() {
-  // Try local JSON first
   try {
     const local = await fetch('/serial_killers_with_local_images.json');
     if (local.ok) {
       const json = await local.json();
-      // Re-extract victims with better parser; keep structure compatible
-      allData = json.map(k => ({
-        name:         k.name,
-        victims:      extractVictimCount(k.description) ?? (k.confirmed_victims ?? null),
-        years_active: extractYears(k.description),
-        image:        k.image,
-        description:  k.description,
-        wikipedia_url: k.wikipedia_url,
-      })).filter(k => k.description && k.description.length > 60);
+      allData = json.map(k => {
+        const st = KNOWN_STATUS[k.name] || {};
+        const or = STATIC_RECORDS[k.name] || {};
+        return {
+          name: k.name,
+          nickname: or.nickname || extractNickname(k.description),
+          country:  or.country  || extractCountry(k.description),
+          years_active: or.years_active || k.years_active || extractYears(k.description),
+          confirmed_victims: or.confirmed_victims || extractVictimCount(k.description) || k.confirmed_victims,
+          method:   or.method  || extractMethod(k.description),
+          image:    or.image   || (k.image?.startsWith('images/') ? '/'+k.image : k.image),
+          description: or.description || k.description,
+          wikipedia_url: or.wikipedia_url || k.wikipedia_url,
+          status:    st.status   || or.status || 'UNKNOWN',
+          death_date: st.death_date || or.death_date || null,
+        };
+      }).filter(k => k.description && k.description.length > 60);
+      // Add static-only records not in local JSON
+      for (const [name, rec] of Object.entries(STATIC_RECORDS)) {
+        if (!allData.find(k => k.name === name)) {
+          const st = KNOWN_STATUS[name] || {};
+          allData.push({ ...rec, status: st.status || rec.status || 'UNKNOWN', death_date: st.death_date || rec.death_date });
+        }
+      }
       renderAll(); updateStats();
       return;
     }
@@ -178,141 +270,183 @@ async function loadData() {
   // Wikipedia API batches
   const BATCH = 5;
   for (let i = 0; i < KILLERS.length; i += BATCH) {
-    const batch   = KILLERS.slice(i, i + BATCH);
-    const settled = await Promise.allSettled(batch.map(fetchKiller));
-    settled.forEach(r => {
-      if (r.status === 'fulfilled' && r.value) allData.push(r.value);
-    });
+    const settled = await Promise.allSettled(KILLERS.slice(i, i + BATCH).map(fetchKiller));
+    settled.forEach(r => { if (r.status === 'fulfilled' && r.value) allData.push(r.value); });
     renderAll(); updateStats();
     if (i + BATCH < KILLERS.length) await new Promise(r => setTimeout(r, 250));
   }
 }
 
-// ── Render ─────────────────────────────────────────────────────
+// ── RENDER ─────────────────────────────────────────────────────
 function renderAll() {
   const container = document.getElementById('dataContainer');
   container.className = `dataContainer${viewMode === 'list' ? ' list-view' : ''}`;
 
   let data = [...allData];
 
-  // A–Z letter filter
   if (letterQ !== 'ALL') {
-    data = data.filter(k => k.name.trim().toUpperCase().startsWith(letterQ));
+    const lastName = n => n.trim().split(/\s+/).pop().toUpperCase();
+    data = data.filter(k => lastName(k.name).startsWith(letterQ));
   }
-
-  // Search filter
+  if (statusQ !== 'ALL') {
+    data = data.filter(k => k.status === statusQ);
+  }
   if (searchQ) {
     data = data.filter(k => k.name.toLowerCase().includes(searchQ.toLowerCase()));
   }
 
-  // Sort
   if (sortMode === 'victims') {
-    data.sort((a, b) => (b.victims ?? 0) - (a.victims ?? 0));
+    data.sort((a, b) => (b.confirmed_victims ?? 0) - (a.confirmed_victims ?? 0));
   } else {
-    // Sort by last name
-    const lastName = n => n.trim().split(/\s+/).pop().toLowerCase();
-    data.sort((a, b) => lastName(a.name).localeCompare(lastName(b.name)));
+    const ln = n => n.trim().split(/\s+/).pop().toLowerCase();
+    data.sort((a, b) => ln(a.name).localeCompare(ln(b.name)));
   }
 
   document.getElementById('visibleCount').textContent = data.length;
+  document.getElementById('footerCount').textContent = `${data.length} RECORDS DISPLAYED`;
 
   if (!data.length && allData.length > 0) {
-    container.innerHTML = `<div class="empty-state"><p>No cases match your filters.</p></div>`;
+    container.innerHTML = `<div class="empty-state"><p>NO CASES MATCH FILTERS</p></div>`;
     return;
   }
   if (!data.length) {
-    container.innerHTML = `<div class="loading-state"><div class="loader-ring"></div><p>Retrieving case files…</p></div>`;
+    container.innerHTML = `<div class="loading-state"><div class="loader-bar"><div class="loader-fill"></div></div><p>RETRIEVING CASE FILES</p></div>`;
     return;
   }
 
-  container.innerHTML = data.map(k =>
-    viewMode === 'list' ? buildListCard(k) : buildGridCard(k)
+  container.innerHTML = data.map((k, i) =>
+    viewMode === 'list' ? buildListCard(k, i + 1) : buildGridCard(k, i + 1)
   ).join('');
 }
 
-// ── Grid Card ─────────────────────────────────────────────────
-function buildGridCard(k) {
-  const imgContent = k.image
-    ? `<img src="${escHtml(k.image.startsWith('images/') ? '/'+k.image : k.image)}" alt="${escHtml(k.name)}" loading="lazy" />`
-    : NO_IMAGE_SVG;
+// ── STATUS TAG HTML ───────────────────────────────────────────
+function statusTagHtml(k) {
+  const s = k.status || 'UNKNOWN';
+  let cls = '';
+  let label = s;
 
-  const badgeCls = k.victims !== null ? 'victim-badge' : 'victim-badge unknown';
-  const badgeNum = k.victims !== null ? k.victims : '?';
+  if (s === 'EXECUTED') {
+    cls = 'status-executed';
+    label = k.death_date ? `EXECUTED ${k.death_date}` : 'EXECUTED';
+  } else if (s === 'IN PRISON') {
+    cls = 'status-prison';
+    label = 'IN PRISON';
+  } else if (s === 'DECEASED') {
+    cls = 'status-deceased';
+    label = k.death_date ? `DECEASED ${k.death_date}` : 'DECEASED';
+  } else if (s === 'UNIDENTIFIED') {
+    cls = 'status-unidentified';
+    label = 'UNIDENTIFIED';
+  }
 
-  const yearsHtml = k.years_active
-    ? `<div class="card-years"><span class="years-label">ACTIVE</span><span class="years-val">${escHtml(k.years_active)}</span></div>`
-    : '';
+  return `<span class="tag ${cls}">${escHtml(label)}</span>`;
+}
+
+// ── GRID CARD ─────────────────────────────────────────────────
+function buildGridCard(k, rank) {
+  const imgHtml = k.image
+    ? `<img src="${escHtml(k.image)}" alt="${escHtml(k.name)}" loading="lazy" />`
+    : noImgSvg();
+
+  const nicknameHtml = k.nickname
+    ? `<p class="card-nickname">"${escHtml(k.nickname)}"</p>` : '';
+
+  const metaRows = [
+    k.years_active ? `<div class="card-meta-row"><span class="meta-key">ACTIVE</span><span class="meta-val">${escHtml(k.years_active)}</span></div>` : '',
+    k.country      ? `<div class="card-meta-row"><span class="meta-key">COUNTRY</span><span class="meta-val">${escHtml(k.country)}</span></div>` : '',
+    k.method       ? `<div class="card-meta-row"><span class="meta-key">METHOD</span><span class="meta-val">${escHtml(k.method)}</span></div>` : '',
+    k.confirmed_victims != null ? `<div class="card-meta-row"><span class="meta-key">VICTIMS</span><span class="meta-val">${k.confirmed_victims}</span></div>` : '',
+  ].filter(Boolean).join('');
 
   const wikiHtml = k.wikipedia_url
-    ? `<a href="${escHtml(k.wikipedia_url)}" target="_blank" rel="noopener noreferrer" class="wiki-link">WIKIPEDIA ↗</a>`
-    : '';
+    ? `<a href="${escHtml(k.wikipedia_url)}" target="_blank" rel="noopener noreferrer" class="wiki-link">WIKIPEDIA ↗</a>` : '';
 
   return `
     <article class="case-card">
-      <figure class="card-figure">${imgContent}</figure>
+      <figure class="card-figure">${imgHtml}</figure>
       <div class="card-body">
-        <div class="card-header-row">
-          <h2 class="card-name">${escHtml(k.name)}</h2>
-          <div class="${badgeCls}">
-            <span class="badge-num">${badgeNum}</span>
-            <span class="badge-sub">Victims</span>
-          </div>
+        <span class="card-case-num">CASE #${String(rank).padStart(3,'0')}</span>
+        <h2 class="card-name">${escHtml(k.name)}</h2>
+        ${nicknameHtml}
+        <div class="card-tags">
+          ${statusTagHtml(k)}
+          ${k.country ? `<span class="tag country">${escHtml(k.country.toUpperCase())}</span>` : ''}
         </div>
-        ${yearsHtml}
+        ${metaRows ? `<div class="card-meta">${metaRows}</div>` : ''}
         <p class="card-desc">${escHtml(k.description)}</p>
         <div class="card-footer">${wikiHtml}</div>
       </div>
     </article>`;
 }
 
-// ── List Card ─────────────────────────────────────────────────
-function buildListCard(k) {
-  const imgContent = k.image
-    ? `<img src="${escHtml(k.image.startsWith('images/') ? '/'+k.image : k.image)}" alt="${escHtml(k.name)}" loading="lazy" />`
-    : NO_IMAGE_SVG;
-
-  const badgeCls = k.victims !== null ? 'victim-badge' : 'victim-badge unknown';
-  const badgeNum = k.victims !== null ? k.victims : '?';
-
-  const yearsHtml = k.years_active
-    ? `<div class="card-years"><span class="years-label">ACTIVE</span> <span class="years-val">${escHtml(k.years_active)}</span></div>`
-    : '';
+// ── LIST CARD ─────────────────────────────────────────────────
+function buildListCard(k, rank) {
+  const imgHtml = k.image
+    ? `<img src="${escHtml(k.image)}" alt="${escHtml(k.name)}" loading="lazy" />`
+    : noImgSvg();
 
   const wikiHtml = k.wikipedia_url
-    ? `<a href="${escHtml(k.wikipedia_url)}" target="_blank" rel="noopener noreferrer" class="wiki-link">WIKI ↗</a>`
-    : '';
+    ? `<a href="${escHtml(k.wikipedia_url)}" target="_blank" rel="noopener noreferrer" class="wiki-link">WIKI ↗</a>` : '';
 
   return `
     <article class="case-card">
-      <figure class="card-figure">${imgContent}</figure>
+      <figure class="card-figure">${imgHtml}</figure>
       <div class="card-body">
-        <div class="card-header-row">
+        <div class="card-header-row" style="display:flex;flex-direction:column;gap:2px;min-width:180px;flex-shrink:0;">
           <h2 class="card-name">${escHtml(k.name)}</h2>
-          ${yearsHtml}
+          ${k.years_active ? `<span style="font-size:0.65rem;color:var(--gray3);letter-spacing:0.06em;">${escHtml(k.years_active)}</span>` : ''}
         </div>
         <p class="card-desc">${escHtml(k.description)}</p>
-        <div class="card-footer">
-          ${wikiHtml}
-          <div class="${badgeCls}">
-            <span class="badge-num">${badgeNum}</span>
-            <span class="badge-sub">Victims</span>
-          </div>
-        </div>
+        <div class="card-tags">${statusTagHtml(k)}</div>
+        <div class="card-footer">${wikiHtml}</div>
       </div>
     </article>`;
 }
 
-// ── Stats ─────────────────────────────────────────────────────
-function updateStats() {
-  document.getElementById('totalCount').textContent = allData.length;
-  const tv = allData.reduce((s, k) => s + (k.victims ?? 0), 0);
-  document.getElementById('totalVictims').textContent = tv.toLocaleString();
+// ── PLACEHOLDER SVG ───────────────────────────────────────────
+function noImgSvg() {
+  return `
+  <svg class="no-img-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220">
+    <rect width="360" height="220" fill="#F0F0F0"/>
+    <defs>
+      <pattern id="hatch" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+        <rect width="30" height="30" fill="#F0F0F0"/>
+        <rect y="13" width="30" height="4" fill="#E0E0E0"/>
+      </pattern>
+    </defs>
+    <rect width="360" height="220" fill="url(#hatch)"/>
+    <g transform="rotate(-5,180,80)">
+      <rect x="-40" y="60" width="460" height="34" fill="#0066FF"/>
+      <text font-family="monospace" font-size="11" font-weight="900" fill="#FFFFFF" letter-spacing="4" y="82" x="-10">
+        DO NOT CROSS · NO IMAGE ON FILE · DO NOT CROSS · NO IMAGE ON FILE ·
+      </text>
+    </g>
+    <g transform="rotate(4,180,145)">
+      <rect x="-40" y="128" width="460" height="34" fill="#000000"/>
+      <text font-family="monospace" font-size="11" font-weight="900" fill="#FFFFFF" letter-spacing="4" y="150" x="-10">
+        · NO IMAGE ON FILE · DO NOT CROSS · NO IMAGE ON FILE · DO NOT CROSS
+      </text>
+    </g>
+  </svg>`;
 }
 
-// ── Wire controls ─────────────────────────────────────────────
+// ── STATS ──────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('totalCount').textContent   = allData.length;
+  document.getElementById('totalVictims').textContent = allData.reduce((s, k) => s + (k.confirmed_victims ?? 0), 0).toLocaleString();
+}
+
+// ── LIVE TIME ─────────────────────────────────────────────────
+function updateTime() {
+  const el = document.getElementById('liveTime');
+  if (el) el.textContent = new Date().toUTCString().replace('GMT','UTC');
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// ── CONTROLS ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
 
-  // A–Z buttons
   document.querySelectorAll('.az-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.az-btn').forEach(b => b.classList.remove('active'));
@@ -322,7 +456,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Sort
   document.querySelectorAll('[data-sort]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
@@ -332,7 +465,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // View toggle
+  document.querySelectorAll('[data-status]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-status]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      statusQ = btn.dataset.status;
+      renderAll();
+    });
+  });
+
   document.querySelectorAll('[data-view]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
@@ -342,7 +483,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Search
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQ = e.target.value.trim();
     renderAll();

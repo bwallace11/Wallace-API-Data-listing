@@ -4,43 +4,53 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Criminal Case Archive</title>
-    <link href="https://api.fontshare.com/v2/css?f[]=switzer@700,600&f[]=general-sans@400,500&display=swap" rel="stylesheet">
+    <title>Case Archive — Serial Homicide Database</title>
+
+    <!-- Cabinet Grotesk via Fontshare -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/src/fonts/general-sans.css">
     <link rel="stylesheet" href="/src/style.css">
     <script src="/src/script.js" type="module" defer></script>
   </head>
   <body>
 
-    <header class="site-header">
-      <div class="header-inner">
-        <div class="header-brand">
-          <p class="brand-eyebrow">CRIMINAL CASE ARCHIVE · EST. WIKIPEDIA API</p>
-          <h1 class="brand-title">Serial Homicide<br>Case Database</h1>
-          <p class="header-desc">Documented serial homicide cases sourced from Wikipedia public records. For educational and analytical purposes only.</p>
+    <!-- MASTHEAD -->
+    <header class="masthead">
+      <div class="masthead-top">
+        <span class="masthead-label">CASE ARCHIVE</span>
+        <span class="masthead-label" id="liveTime"></span>
+      </div>
+      <div class="masthead-body">
+        <div class="masthead-left">
+          <h1 class="masthead-title">SERIAL<br>HOMICIDE<br>DATABASE</h1>
         </div>
-        <div class="header-stats">
-          <div class="stat-card">
-            <span class="stat-val" id="totalCount">—</span>
-            <span class="stat-label">Total Cases</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-val" id="totalVictims">—</span>
-            <span class="stat-label">Documented Victims</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-val" id="visibleCount">—</span>
-            <span class="stat-label">Showing</span>
+        <div class="masthead-right">
+          <p class="masthead-desc">Documented cases sourced from public Wikipedia records. Educational and analytical use only.</p>
+          <div class="masthead-stats">
+            <div class="mstat">
+              <span class="mstat-num" id="totalCount">—</span>
+              <span class="mstat-lbl">CASES</span>
+            </div>
+            <div class="mstat-divider"></div>
+            <div class="mstat">
+              <span class="mstat-num" id="totalVictims">—</span>
+              <span class="mstat-lbl">DOCUMENTED VICTIMS</span>
+            </div>
+            <div class="mstat-divider"></div>
+            <div class="mstat">
+              <span class="mstat-num" id="visibleCount">—</span>
+              <span class="mstat-lbl">SHOWING</span>
+            </div>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- A–Z Index -->
+    <!-- A–Z INDEX -->
     <nav class="az-bar" aria-label="Alphabetical index">
       <div class="az-inner">
         <button class="az-btn active" data-letter="ALL">ALL</button>
-        <span class="az-divider"></span>
         <button class="az-btn" data-letter="A">A</button>
         <button class="az-btn" data-letter="B">B</button>
         <button class="az-btn" data-letter="C">C</button>
@@ -70,54 +80,69 @@
       </div>
     </nav>
 
-    <!-- Controls -->
+    <!-- CONTROLS -->
     <div class="controls-bar">
       <div class="controls-inner">
-        <div class="filter-group">
-          <label class="ctrl-label" for="searchInput">SEARCH</label>
-          <input type="text" class="ctrl-input" id="searchInput" placeholder="Search by name…" />
+
+        <div class="ctrl-group">
+          <label class="ctrl-lbl" for="searchInput">SEARCH</label>
+          <input type="text" class="ctrl-input" id="searchInput" placeholder="Name…" />
         </div>
-        <div class="filter-group">
-          <label class="ctrl-label">SORT BY</label>
+
+        <div class="ctrl-group">
+          <label class="ctrl-lbl">SORT</label>
           <div class="btn-group">
-            <button class="ctrl-btn active" data-sort="name">A – Z</button>
-            <button class="ctrl-btn" data-sort="victims">Victim Count</button>
+            <button class="ctrl-btn active" data-sort="name">A–Z</button>
+            <button class="ctrl-btn" data-sort="victims">VICTIMS ↓</button>
           </div>
         </div>
-        <div class="filter-group">
-          <label class="ctrl-label">VIEW</label>
-          <div class="btn-group view-btn-group">
-            <button class="view-btn active" data-view="grid" title="Grid view" aria-label="Grid view">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
-                <rect x="0" y="0" width="6" height="6" rx="1"/>
-                <rect x="8" y="0" width="6" height="6" rx="1"/>
-                <rect x="0" y="8" width="6" height="6" rx="1"/>
-                <rect x="8" y="8" width="6" height="6" rx="1"/>
+
+        <div class="ctrl-group">
+          <label class="ctrl-lbl">STATUS FILTER</label>
+          <div class="btn-group">
+            <button class="ctrl-btn active" data-status="ALL">ALL</button>
+            <button class="ctrl-btn" data-status="EXECUTED">EXECUTED</button>
+            <button class="ctrl-btn" data-status="DECEASED">DECEASED</button>
+            <button class="ctrl-btn" data-status="IN PRISON">IN PRISON</button>
+            <button class="ctrl-btn" data-status="UNIDENTIFIED">UNIDENTIFIED</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group view-group">
+          <label class="ctrl-lbl">VIEW</label>
+          <div class="btn-group">
+            <button class="view-btn active" data-view="grid" title="Grid" aria-label="Grid view">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                <rect x="0" y="0" width="6" height="6"/>
+                <rect x="8" y="0" width="6" height="6"/>
+                <rect x="0" y="8" width="6" height="6"/>
+                <rect x="8" y="8" width="6" height="6"/>
               </svg>
             </button>
-            <button class="view-btn" data-view="list" title="List view" aria-label="List view">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
-                <rect x="0" y="1" width="14" height="2" rx="1"/>
-                <rect x="0" y="6" width="14" height="2" rx="1"/>
-                <rect x="0" y="11" width="14" height="2" rx="1"/>
+            <button class="view-btn" data-view="list" title="List" aria-label="List view">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                <rect x="0" y="1" width="14" height="2"/>
+                <rect x="0" y="6" width="14" height="2"/>
+                <rect x="0" y="11" width="14" height="2"/>
               </svg>
             </button>
           </div>
         </div>
+
       </div>
     </div>
 
+    <!-- MAIN GRID -->
     <main class="dataContainer" id="dataContainer">
       <div class="loading-state">
-        <div class="loader-ring"></div>
-        <p>Retrieving case files…</p>
+        <div class="loader-bar"><div class="loader-fill"></div></div>
+        <p>RETRIEVING CASE FILES</p>
       </div>
     </main>
 
     <footer class="site-footer">
-      <div class="footer-inner">
-        <p>Data sourced from the Wikipedia REST API &nbsp;·&nbsp; Educational and analytical use only &nbsp;·&nbsp; Not affiliated with any law enforcement agency</p>
-      </div>
+      <span>CASE ARCHIVE · DATA VIA WIKIPEDIA REST API · EDUCATIONAL USE ONLY</span>
+      <span id="footerCount"></span>
     </footer>
 
   </body>
