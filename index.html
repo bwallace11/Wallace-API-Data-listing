@@ -4,24 +4,67 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API Data Listing</title>
+    <title>Criminal Analysis Platform</title>
+
+    <!-- Font imports -->
+    <link rel="stylesheet" href="/src/fonts/general-sans.css">
+    <link rel="stylesheet" href="/src/fonts/khand.css">
 
     <!-- Compiled CSS file -->
-     <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/style.css">
+
     <!-- Transpiled JS -->
     <script src="/src/script.js" type="module" defer></script>
-
   </head>
   <body>
 
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <span class="brand-tag">DATASET</span>
+          <h1 class="brand-title">Criminal<br>Analysis<br>Platform</h1>
+        </div>
+        <div class="header-meta">
+          <p class="header-desc">Statistical analysis of documented serial homicide cases. Data sourced from public records and Wikipedia.</p>
+          <div class="stat-row">
+            <div class="stat-pill"><span class="stat-num" id="totalCount">—</span><span>Cases Loaded</span></div>
+            <div class="stat-pill"><span class="stat-num" id="totalVictims">—</span><span>Total Victims</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-    <main class="dataContainer">
+    <div class="controls-bar">
+      <div class="controls-inner">
+        <div class="filter-group">
+          <label class="ctrl-label">SORT BY</label>
+          <div class="btn-group">
+            <button class="ctrl-btn active" data-sort="victims">Victim Count</button>
+            <button class="ctrl-btn" data-sort="name">Name A–Z</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label class="ctrl-label">SEARCH</label>
+          <input type="text" class="ctrl-input" id="searchInput" placeholder="Search by name…" />
+        </div>
+        <div class="filter-group">
+          <label class="ctrl-label">MIN VICTIMS</label>
+          <input type="range" id="victimFilter" min="0" max="300" value="0" class="ctrl-range" />
+          <span class="range-val" id="rangeVal">0+</span>
+        </div>
+      </div>
+    </div>
 
-        <!-- Static Template
-        Your template
-        -->
-        
+    <main class="dataContainer" id="dataContainer">
+      <div class="loading-state">
+        <div class="loader-ring"></div>
+        <p>Retrieving case files…</p>
+      </div>
     </main>
-  
+
+    <footer class="site-footer">
+      <p>Data aggregated from Wikipedia public API. For educational and analytical purposes only.</p>
+    </footer>
+
   </body>
 </html>
