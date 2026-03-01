@@ -1,3 +1,5 @@
+console.log('📖 The Keepsake Ledger — UNHINGED EDITION');
+
 // ── STATIC RECORDS ────────────────────────────────────────────
 const STATIC = {
   "Dennis Nilsen": {
@@ -429,9 +431,10 @@ function renderAll() {
       html+=`<div class="letter-divider">${letter.toLowerCase()}</div>`;
       lastLetter=letter;
     }
-    html+=buildEntry(k,i+1);
-    // Insert sketchy drawing every 3rd entry
-    if((i+1)%3===0 && i<data.length-1) {
+    // If followed by a sketch divider, entry surrenders its bottom margin
+    const hasSketchAfter = (i+1)%3===0 && i<data.length-1;
+    html+=buildEntry(k, i+1, hasSketchAfter);
+    if(hasSketchAfter) {
       html+=`<div class="sketch-divider">${SKETCHES[sketchIdx%SKETCHES.length]}</div>`;
       sketchIdx++;
     }
@@ -472,7 +475,7 @@ function noPhotoSvg() {
 }
 
 // ── BUILD ENTRY ───────────────────────────────────────────────
-function buildEntry(k, rank) {
+function buildEntry(k, rank, noBottomMargin=false) {
   const rot       = ROTATIONS[rank%ROTATIONS.length];
   const showAnnot = rank%4===0;
   const annotation= showAnnot?ANNOTATIONS[rank%ANNOTATIONS.length]:'';
@@ -512,7 +515,7 @@ function buildEntry(k, rank) {
     :'<span></span>';
 
   return `
-    <div class="entry">
+    <div class="entry" style="${noBottomMargin ? 'margin-bottom:0' : ''}">
       ${marginHtml}
       ${tallyHtml}
       <div class="entry-paper">
