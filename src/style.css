@@ -20,9 +20,14 @@
   --tape-dark:     rgba(176,154,122,0.65);
   --paperclip:     #6B6B6B;
   --scratch-color: rgba(28,20,16,0.07);
+  /* SLOT 1: HEADER FONT — title, entry names, case numbers     */
   --f-type:        'Special Elite', 'Courier New', monospace;
+  /* SLOT 2: BODY FONT — descriptions, facts, body text         */
+  --f-body:        'rubik', Georgia, serif;
+  /* SLOT 3: BG WORDS FONT — the manic background text layer    */
+  --f-bg-words:    'DK Face Your Fears', cursive;
+  /* Internal supporting fonts (italic dates, handwritten notes) */
   --f-serif-ital:  'Cormorant Garamond', Georgia, serif;
-  --f-body:        'Source Serif 4', Georgia, serif;
   --f-hand:        'Caveat', cursive;
 }
 
@@ -50,7 +55,20 @@ body {
   background: radial-gradient(ellipse at center, transparent 30%, rgba(10,5,2,0.65) 100%);
 }
 
-/* ── BACKGROUND MANIA LAYER ────────────────────────────────── */
+/* ── BLOOD DROPLETS LAYER ──────────────────────────────────── */
+.blood-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.blood-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
 .bg-mania {
   position: fixed;
   inset: 0;
@@ -65,10 +83,10 @@ body {
   top: 15%;
   left: 50%;
   transform: translateX(-50%) rotate(-15deg);
-  font-family: var(--f-hand);
+  font-family: var(--f-bg-words);
   font-size: 8rem;
   font-weight: 700;
-  color: rgba(28,20,16,0.03);
+  color: rgba(8, 5, 3, 0.04);
   white-space: nowrap;
   letter-spacing: 0.15em;
   line-height: 1;
@@ -88,24 +106,24 @@ body {
 
 /* Scratchy text styles */
 .bg-scratch {
-  font-family: 'Caveat', cursive;
+  font-family: var(--f-bg-words);
   font-size: 13px;
-  fill: rgba(28,20,16,0.09);
+  fill: rgba(8, 5, 3, 0.13);
   font-weight: 600;
 }
 
 .bg-scratch-lg {
-  font-family: 'Caveat', cursive;
+  font-family: var(--f-bg-words);
   font-size: 22px;
-  fill: rgba(74,21,21,0.07);
+  fill: rgba(8, 5, 3, 0.10);
   font-weight: 700;
   letter-spacing: 0.05em;
 }
 
-/* ── ALL BODY CONTENT sits above bg ────────────────────────── */
-body > *:not(.grain-overlay):not(.vignette):not(.bg-mania) {
+/* ── ALL BODY CONTENT sits above bg and blood layers ────────── */
+body > *:not(.grain-overlay):not(.vignette):not(.bg-mania):not(.blood-layer) {
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 /* ── MASTHEAD ─────────────────────────────────────────────── */
@@ -306,7 +324,7 @@ body > *:not(.grain-overlay):not(.vignette):not(.bg-mania) {
 .letter-divider {
   font-family: var(--f-hand); font-size: 4.5rem;
   color: rgba(28,20,16,0.12);
-  line-height: 1; margin: 48px 0 -16px -8px;
+  line-height: 1; margin: 72px 0 28px -8px;
   pointer-events: none; user-select: none;
   position: relative; font-weight: 700;
 }
@@ -318,7 +336,7 @@ body > *:not(.grain-overlay):not(.vignette):not(.bg-mania) {
 
 /* ── SKETCHY DIVIDER between entries ─────────────────────── */
 .sketch-divider {
-  width: 100%; margin: 8px 0 4px;
+  width: 100%; margin: 0;
   display: flex; justify-content: center; align-items: center;
   pointer-events: none;
 }
@@ -327,7 +345,7 @@ body > *:not(.grain-overlay):not(.vignette):not(.bg-mania) {
 /* ── ENTRY ────────────────────────────────────────────────── */
 .entry {
   position: relative;
-  margin-bottom: 52px;
+  margin-bottom: 48px;
   animation: pageIn 0.45s ease both;
 }
 @keyframes pageIn {
@@ -506,7 +524,9 @@ body > *:not(.grain-overlay):not(.vignette):not(.bg-mania) {
 
 /* ── BACK TO TOP ──────────────────────────────────────────── */
 .back-to-top {
-  position: fixed; bottom: 36px; right: 36px; z-index: 500;
+  position: fixed;
+  bottom: 36px; right: 36px;
+  z-index: 1100;
   background: var(--ink); color: var(--paper);
   border: none; width: 52px; height: 52px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
