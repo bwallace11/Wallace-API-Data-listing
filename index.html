@@ -4,145 +4,104 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Case Archive — Serial Homicide Database</title>
+    <title>The Keepsake Ledger</title>
 
-    <!-- Cabinet Grotesk via Fontshare -->
-    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&display=swap" rel="stylesheet">
+    <!-- Fonts: Special Elite (typewriter header) + Cormorant Garamond (dates/italic) + Source Serif 4 (body) + Caveat (handwritten notes) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/src/fonts/general-sans.css">
     <link rel="stylesheet" href="/src/style.css">
     <script src="/src/script.js" type="module" defer></script>
   </head>
   <body>
 
-    <!-- MASTHEAD -->
+    <!-- Grain overlay -->
+    <div class="grain-overlay" aria-hidden="true"></div>
+
+    <!-- Vignette -->
+    <div class="vignette" aria-hidden="true"></div>
+
+    <!-- LEDGER COVER / MASTHEAD -->
     <header class="masthead">
-      <div class="masthead-top">
-        <span class="masthead-label">CASE ARCHIVE</span>
-        <span class="masthead-label" id="liveTime"></span>
-      </div>
-      <div class="masthead-body">
-        <div class="masthead-left">
-          <h1 class="masthead-title">SERIAL<br>HOMICIDE<br>DATABASE</h1>
+      <div class="masthead-inner">
+        <p class="ledger-label">PRIVATE COLLECTION — VOL. I</p>
+        <h1 class="ledger-title">THE KEEPSAKE<br>LEDGER</h1>
+        <div class="ledger-rule"></div>
+        <p class="ledger-subtitle">A documented record of serial homicide cases.<br>Assembled from public record. Handle with discretion.</p>
+        <div class="ledger-stats">
+          <span class="stat-item"><span class="stat-num" id="totalCount">—</span> entries</span>
+          <span class="stat-sep">·</span>
+          <span class="stat-item"><span class="stat-num" id="visibleCount">—</span> shown</span>
         </div>
-        <div class="masthead-right">
-          <p class="masthead-desc">Documented cases sourced from public Wikipedia records. Educational and analytical use only.</p>
-          <div class="masthead-stats">
-            <div class="mstat">
-              <span class="mstat-num" id="totalCount">—</span>
-              <span class="mstat-lbl">CASES</span>
-            </div>
-            <div class="mstat-divider"></div>
-            <div class="mstat">
-              <span class="mstat-num" id="totalVictims">—</span>
-              <span class="mstat-lbl">DOCUMENTED VICTIMS</span>
-            </div>
-            <div class="mstat-divider"></div>
-            <div class="mstat">
-              <span class="mstat-num" id="visibleCount">—</span>
-              <span class="mstat-lbl">SHOWING</span>
-            </div>
-          </div>
-        </div>
+        <!-- Coffee ring decoration -->
+        <div class="coffee-ring" aria-hidden="true"></div>
       </div>
     </header>
 
-    <!-- A–Z INDEX -->
-    <nav class="az-bar" aria-label="Alphabetical index">
-      <div class="az-inner">
-        <button class="az-btn active" data-letter="ALL">ALL</button>
-        <button class="az-btn" data-letter="A">A</button>
-        <button class="az-btn" data-letter="B">B</button>
-        <button class="az-btn" data-letter="C">C</button>
-        <button class="az-btn" data-letter="D">D</button>
-        <button class="az-btn" data-letter="E">E</button>
-        <button class="az-btn" data-letter="F">F</button>
-        <button class="az-btn" data-letter="G">G</button>
-        <button class="az-btn" data-letter="H">H</button>
-        <button class="az-btn" data-letter="I">I</button>
-        <button class="az-btn" data-letter="J">J</button>
-        <button class="az-btn" data-letter="K">K</button>
-        <button class="az-btn" data-letter="L">L</button>
-        <button class="az-btn" data-letter="M">M</button>
-        <button class="az-btn" data-letter="N">N</button>
-        <button class="az-btn" data-letter="O">O</button>
-        <button class="az-btn" data-letter="P">P</button>
-        <button class="az-btn" data-letter="Q">Q</button>
-        <button class="az-btn" data-letter="R">R</button>
-        <button class="az-btn" data-letter="S">S</button>
-        <button class="az-btn" data-letter="T">T</button>
-        <button class="az-btn" data-letter="U">U</button>
-        <button class="az-btn" data-letter="V">V</button>
-        <button class="az-btn" data-letter="W">W</button>
-        <button class="az-btn" data-letter="X">X</button>
-        <button class="az-btn" data-letter="Y">Y</button>
-        <button class="az-btn" data-letter="Z">Z</button>
+    <!-- FILTER TABS — handwritten scribbled look -->
+    <nav class="filter-section" aria-label="Filters">
+      <div class="filter-inner">
+
+        <div class="filter-row">
+          <span class="filter-head">— index by name —</span>
+          <div class="az-tabs" id="azTabs">
+            <button class="az-tab active" data-letter="ALL">all</button>
+            <button class="az-tab" data-letter="A">a</button>
+            <button class="az-tab" data-letter="B">b</button>
+            <button class="az-tab" data-letter="C">c</button>
+            <button class="az-tab" data-letter="D">d</button>
+            <button class="az-tab" data-letter="E">e</button>
+            <button class="az-tab" data-letter="F">f</button>
+            <button class="az-tab" data-letter="G">g</button>
+            <button class="az-tab" data-letter="H">h</button>
+            <button class="az-tab" data-letter="I">i</button>
+            <button class="az-tab" data-letter="J">j</button>
+            <button class="az-tab" data-letter="K">k</button>
+            <button class="az-tab" data-letter="L">l</button>
+            <button class="az-tab" data-letter="M">m</button>
+            <button class="az-tab" data-letter="N">n</button>
+            <button class="az-tab" data-letter="O">o</button>
+            <button class="az-tab" data-letter="P">p</button>
+            <button class="az-tab" data-letter="R">r</button>
+            <button class="az-tab" data-letter="S">s</button>
+            <button class="az-tab" data-letter="T">t</button>
+            <button class="az-tab" data-letter="W">w</button>
+            <button class="az-tab" data-letter="Z">z</button>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <span class="filter-head">— filter by status —</span>
+          <div class="status-tabs">
+            <button class="status-tab active" data-status="ALL">all cases</button>
+            <button class="status-tab" data-status="EXECUTED">executed</button>
+            <button class="status-tab" data-status="IN PRISON">imprisoned</button>
+            <button class="status-tab" data-status="DECEASED">deceased</button>
+            <button class="status-tab" data-status="UNIDENTIFIED">unidentified</button>
+          </div>
+        </div>
+
+        <div class="filter-row search-row">
+          <span class="filter-head">— search —</span>
+          <input type="text" id="searchInput" class="ledger-search" placeholder="write a name…" />
+        </div>
+
       </div>
     </nav>
 
-    <!-- CONTROLS -->
-    <div class="controls-bar">
-      <div class="controls-inner">
-
-        <div class="ctrl-group">
-          <label class="ctrl-lbl" for="searchInput">SEARCH</label>
-          <input type="text" class="ctrl-input" id="searchInput" placeholder="Name…" />
-        </div>
-
-        <div class="ctrl-group">
-          <label class="ctrl-lbl">SORT</label>
-          <div class="btn-group">
-            <button class="ctrl-btn active" data-sort="name">A–Z</button>
-            <button class="ctrl-btn" data-sort="victims">VICTIMS ↓</button>
-          </div>
-        </div>
-
-        <div class="ctrl-group">
-          <label class="ctrl-lbl">STATUS FILTER</label>
-          <div class="btn-group">
-            <button class="ctrl-btn active" data-status="ALL">ALL</button>
-            <button class="ctrl-btn" data-status="EXECUTED">EXECUTED</button>
-            <button class="ctrl-btn" data-status="DECEASED">DECEASED</button>
-            <button class="ctrl-btn" data-status="IN PRISON">IN PRISON</button>
-            <button class="ctrl-btn" data-status="UNIDENTIFIED">UNIDENTIFIED</button>
-          </div>
-        </div>
-
-        <div class="ctrl-group view-group">
-          <label class="ctrl-lbl">VIEW</label>
-          <div class="btn-group">
-            <button class="view-btn active" data-view="grid" title="Grid" aria-label="Grid view">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
-                <rect x="0" y="0" width="6" height="6"/>
-                <rect x="8" y="0" width="6" height="6"/>
-                <rect x="0" y="8" width="6" height="6"/>
-                <rect x="8" y="8" width="6" height="6"/>
-              </svg>
-            </button>
-            <button class="view-btn" data-view="list" title="List" aria-label="List view">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
-                <rect x="0" y="1" width="14" height="2"/>
-                <rect x="0" y="6" width="14" height="2"/>
-                <rect x="0" y="11" width="14" height="2"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- MAIN GRID -->
-    <main class="dataContainer" id="dataContainer">
+    <!-- LEDGER ENTRIES -->
+    <main class="ledger-pages" id="dataContainer">
       <div class="loading-state">
-        <div class="loader-bar"><div class="loader-fill"></div></div>
-        <p>RETRIEVING CASE FILES</p>
+        <p class="loading-text">gathering files<span class="dots">...</span></p>
       </div>
     </main>
 
-    <footer class="site-footer">
-      <span>CASE ARCHIVE · DATA VIA WIKIPEDIA REST API · EDUCATIONAL USE ONLY</span>
-      <span id="footerCount"></span>
+    <footer class="ledger-footer">
+      <div class="footer-inner">
+        <span class="footer-note">— end of record —</span>
+        <span class="footer-source">Source: Wikipedia REST API · For study only</span>
+      </div>
     </footer>
 
   </body>

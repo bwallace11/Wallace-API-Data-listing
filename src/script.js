@@ -1,151 +1,177 @@
-console.log('👍 CASE ARCHIVE — JS Connected');
+console.log('📖 The Keepsake Ledger — loaded');
 
-// ── STATIC OVERRIDES ──────────────────────────────────────────
-// These records have hand-curated data that will merge/override Wikipedia
-const STATIC_RECORDS = {
+// ── STATIC RECORDS (fully curated, no guessing) ───────────────
+const STATIC = {
   "Dennis Nilsen": {
-    name:               "Dennis Nilsen",
-    nickname:           "The Muswell Hill Murderer",
-    country:            "United Kingdom",
-    years_active:       "1978–1983",
-    confirmed_victims:  15,
-    method:             "Strangulation, drowning",
-    description:        "Scottish serial killer who murdered young men in London. He kept victims' bodies in his home before disposing of them.",
-    wikipedia_url:      "https://en.wikipedia.org/wiki/Dennis_Nilsen",
-    image:              "https://upload.wikimedia.org/wikipedia/en/5/5b/Dennis_Nilsen_police_photo.jpg",
-    status:             "DECEASED", // died in prison 2018
-    death_date:         "2018",
+    name:         "Dennis Nilsen",
+    nickname:     "The Muswell Hill Murderer",
+    years_active: "1978–1983",
+    country:      "United Kingdom",
+    method:       "Strangulation, drowning",
+    description:  "Scottish serial killer who murdered at least fifteen young men in London, keeping their bodies in his home before disposal. Arrested in 1983 after human remains blocked a drain.",
+    wikipedia_url:"https://en.wikipedia.org/wiki/Dennis_Nilsen",
+    image:        "https://upload.wikimedia.org/wikipedia/en/5/5b/Dennis_Nilsen_police_photo.jpg",
+    status:       "DECEASED", death_date: "2018",
   },
   "Peter Kürten": {
-    name:               "Peter Kürten",
-    nickname:           "The Vampire of Düsseldorf",
-    country:            "Germany",
-    years_active:       "1913–1930",
-    confirmed_victims:  9,
-    method:             "Stabbing, strangulation",
-    description:        "German serial killer active primarily in Düsseldorf. He committed multiple murders and assaults and was executed in 1931.",
-    wikipedia_url:      "https://en.wikipedia.org/wiki/Peter_K%C3%BCrten",
-    image:              "https://upload.wikimedia.org/wikipedia/commons/4/45/Peter_K%C3%BCrten.jpg",
-    status:             "EXECUTED",
-    death_date:         "1931",
+    name:         "Peter Kürten",
+    nickname:     "The Vampire of Düsseldorf",
+    years_active: "1913–1930",
+    country:      "Germany",
+    method:       "Stabbing, strangulation",
+    description:  "German serial killer who committed a series of murders and sexual assaults in Düsseldorf. Known for his extreme violence and sadistic nature. Arrested in 1930 and guillotined the following year.",
+    wikipedia_url:"https://en.wikipedia.org/wiki/Peter_K%C3%BCrten",
+    image:        "https://upload.wikimedia.org/wikipedia/commons/4/45/Peter_K%C3%BCrten.jpg",
+    status:       "EXECUTED", death_date: "1931",
   },
+};
+
+// ── KNOWN STATUS (only facts, no guessing) ────────────────────
+const KNOWN_STATUS = {
+  "Ted Bundy":            { status:"EXECUTED",     death_date:"1989" },
+  "Jeffrey Dahmer":       { status:"DECEASED",     death_date:"1994" },
+  "John Wayne Gacy":      { status:"EXECUTED",     death_date:"1994" },
+  "Gary Ridgway":         { status:"IN PRISON" },
+  "Andrei Chikatilo":     { status:"EXECUTED",     death_date:"1994" },
+  "Harold Shipman":       { status:"DECEASED",     death_date:"2004" },
+  "Aileen Wuornos":       { status:"EXECUTED",     death_date:"2002" },
+  "Richard Ramirez":      { status:"DECEASED",     death_date:"2013" },
+  "Edmund Kemper":        { status:"IN PRISON" },
+  "Dennis Rader":         { status:"IN PRISON" },
+  "Albert Fish":          { status:"EXECUTED",     death_date:"1936" },
+  "David Berkowitz":      { status:"IN PRISON" },
+  "Samuel Little":        { status:"DECEASED",     death_date:"2020" },
+  "Rodney Alcala":        { status:"DECEASED",     death_date:"2021" },
+  "H.H. Holmes":          { status:"EXECUTED",     death_date:"1896" },
+  "Robert Pickton":       { status:"IN PRISON" },
+  "Dean Corll":           { status:"DECEASED",     death_date:"1973" },
+  "Ed Gein":              { status:"DECEASED",     death_date:"1984" },
+  "Alexander Pichushkin": { status:"IN PRISON" },
+  "Paul Bernardo":        { status:"IN PRISON" },
+  "Joachim Kroll":        { status:"DECEASED",     death_date:"1991" },
+  "Peter Sutcliffe":      { status:"DECEASED",     death_date:"2020" },
+  "Ian Brady":            { status:"DECEASED",     death_date:"2017" },
+  "Anatoly Onoprienko":   { status:"DECEASED",     death_date:"2013" },
+  "Gary Heidnik":         { status:"EXECUTED",     death_date:"1999" },
+  "Fred West":            { status:"DECEASED",     death_date:"1995" },
+  "Arthur Shawcross":     { status:"DECEASED",     death_date:"2008" },
+  "Wayne Williams":       { status:"IN PRISON" },
+  "Richard Cottingham":   { status:"IN PRISON" },
+  "Randy Kraft":          { status:"IN PRISON" },
+  "Robert Hansen":        { status:"DECEASED",     death_date:"2014" },
+  "Joseph DeAngelo":      { status:"IN PRISON" },
+  "Charles Cullen":       { status:"IN PRISON" },
+  "Marc Dutroux":         { status:"IN PRISON" },
+  "Bruce McArthur":       { status:"IN PRISON" },
+  "William Bonin":        { status:"EXECUTED",     death_date:"1996" },
+  "Donald Gaskins":       { status:"EXECUTED",     death_date:"1991" },
+  "David Parker Ray":     { status:"DECEASED",     death_date:"2002" },
+  "Tsutomu Miyazaki":     { status:"EXECUTED",     death_date:"2008" },
+  "Mikhail Popkov":       { status:"IN PRISON" },
+  "Jack the Ripper":      { status:"UNIDENTIFIED" },
+  "Zodiac Killer":        { status:"UNIDENTIFIED" },
+  "Dennis Nilsen":        { status:"DECEASED",     death_date:"2018" },
+  "Peter Kürten":         { status:"EXECUTED",     death_date:"1931" },
+};
+
+// ── KNOWN METHODS (only things I'm certain of — no extraction) ─
+// Only listed where method is definitively well-known.
+const KNOWN_METHODS = {
+  "Ted Bundy":            "Strangulation, bludgeoning",
+  "Jeffrey Dahmer":       "Strangulation, drugging",
+  "John Wayne Gacy":      "Strangulation, asphyxiation",
+  "Gary Ridgway":         "Strangulation",
+  "Andrei Chikatilo":     "Stabbing, mutilation",
+  "Harold Shipman":       "Lethal injection (diamorphine)",
+  "Aileen Wuornos":       "Shooting",
+  "Richard Ramirez":      "Shooting, stabbing, strangulation",
+  "Edmund Kemper":        "Shooting, stabbing, strangulation",
+  "Dennis Rader":         "Strangulation, asphyxiation",
+  "Albert Fish":          "Strangulation, stabbing",
+  "David Berkowitz":      "Shooting",
+  "H.H. Holmes":          "Various, including gassing",
+  "Dean Corll":           "Shooting, strangulation",
+  "Ed Gein":              "Shooting",
+  "Alexander Pichushkin": "Bludgeoning",
+  "Peter Sutcliffe":      "Bludgeoning, stabbing",
+  "Ian Brady":            "Strangulation, shooting",
+  "Gary Heidnik":         "Strangulation, electrocution",
+  "Fred West":            "Strangulation, mutilation",
+  "Arthur Shawcross":     "Strangulation",
+  "Wayne Williams":       "Strangulation, asphyxiation",
+  "Richard Cottingham":   "Strangulation, stabbing",
+  "William Bonin":        "Strangulation",
+  "Donald Gaskins":       "Various",
+  "Tsutomu Miyazaki":     "Strangulation",
+  "Mikhail Popkov":       "Stabbing, axe",
+  "Dennis Nilsen":        "Strangulation, drowning",
+  "Peter Kürten":         "Stabbing, strangulation",
+};
+
+// ── KNOWN NICKNAMES ───────────────────────────────────────────
+const KNOWN_NICKNAMES = {
+  "Ted Bundy":            "The Lady Killer",
+  "Jeffrey Dahmer":       "The Milwaukee Cannibal",
+  "John Wayne Gacy":      "The Killer Clown",
+  "Gary Ridgway":         "The Green River Killer",
+  "Andrei Chikatilo":     "The Butcher of Rostov",
+  "Harold Shipman":       "Doctor Death",
+  "Aileen Wuornos":       "Damsel of Death",
+  "Richard Ramirez":      "The Night Stalker",
+  "Edmund Kemper":        "The Co-ed Killer",
+  "Dennis Rader":         "BTK Killer",
+  "Albert Fish":          "The Gray Man",
+  "David Berkowitz":      "Son of Sam",
+  "Samuel Little":        "The Traveling Man",
+  "Rodney Alcala":        "The Dating Game Killer",
+  "H.H. Holmes":          "America's First Serial Killer",
+  "Robert Pickton":       "The Pig Farmer Killer",
+  "Dean Corll":           "The Candy Man",
+  "Alexander Pichushkin": "The Chessboard Killer",
+  "Peter Sutcliffe":      "The Yorkshire Ripper",
+  "Ian Brady":            "The Moors Murderer",
+  "Fred West":            "The Gloucester Murderer",
+  "Donald Gaskins":       "Pee Wee",
+  "Jack the Ripper":      "Saucy Jacky",
+  "Zodiac Killer":        "The Zodiac",
+  "Dennis Nilsen":        "The Muswell Hill Murderer",
+  "Peter Kürten":         "The Vampire of Düsseldorf",
 };
 
 // ── KILLER LIST ───────────────────────────────────────────────
 const KILLERS = [
-  "Ted Bundy",
-  "Jeffrey Dahmer",
-  "John Wayne Gacy",
-  "Gary Ridgway",
-  "Andrei Chikatilo",
-  "Harold Shipman",
-  "Aileen Wuornos",
-  "Richard Ramirez",
-  "Edmund Kemper",
-  "Dennis Rader",
-  "Albert Fish",
-  "David Berkowitz",
-  "Samuel Little",
-  "Rodney Alcala",
-  "H.H. Holmes",
-  "Robert Pickton",
-  "Dean Corll",
-  "Ed Gein",
-  "Alexander Pichushkin",
-  "Paul Bernardo",
-  "Joachim Kroll",
-  "Peter Sutcliffe",
-  "Ian Brady",
-  "Anatoly Onoprienko",
-  "Gary Heidnik",
-  "Fred West",
-  "Arthur Shawcross",
-  "Wayne Williams",
-  "Richard Cottingham",
-  "Randy Kraft",
-  "Robert Hansen",
-  "Joseph DeAngelo",
-  "Charles Cullen",
-  "Marc Dutroux",
-  "Bruce McArthur",
-  "William Bonin",
-  "Donald Gaskins",
-  "David Parker Ray",
-  "Tsutomu Miyazaki",
-  "Mikhail Popkov",
-  "Jack the Ripper",
-  "Zodiac Killer",
-  // Static-only additions:
-  "Dennis Nilsen",
-  "Peter Kürten",
+  "Ted Bundy","Jeffrey Dahmer","John Wayne Gacy","Gary Ridgway",
+  "Andrei Chikatilo","Harold Shipman","Aileen Wuornos","Richard Ramirez",
+  "Edmund Kemper","Dennis Rader","Albert Fish","David Berkowitz",
+  "Samuel Little","Rodney Alcala","H.H. Holmes","Robert Pickton",
+  "Dean Corll","Ed Gein","Alexander Pichushkin","Paul Bernardo",
+  "Joachim Kroll","Peter Sutcliffe","Ian Brady","Anatoly Onoprienko",
+  "Gary Heidnik","Fred West","Arthur Shawcross","Wayne Williams",
+  "Richard Cottingham","Randy Kraft","Robert Hansen","Joseph DeAngelo",
+  "Charles Cullen","Marc Dutroux","Bruce McArthur","William Bonin",
+  "Donald Gaskins","David Parker Ray","Tsutomu Miyazaki","Mikhail Popkov",
+  "Jack the Ripper","Zodiac Killer",
+  "Dennis Nilsen","Peter Kürten",
 ];
 
-// ── STATUS LOOKUP ─────────────────────────────────────────────
-// Based on known facts; Wikipedia extract will confirm/supplement
-const KNOWN_STATUS = {
-  "Ted Bundy":            { status: "EXECUTED",     death_date: "1989" },
-  "Jeffrey Dahmer":       { status: "DECEASED",     death_date: "1994" },
-  "John Wayne Gacy":      { status: "EXECUTED",     death_date: "1994" },
-  "Gary Ridgway":         { status: "IN PRISON" },
-  "Andrei Chikatilo":     { status: "EXECUTED",     death_date: "1994" },
-  "Harold Shipman":       { status: "DECEASED",     death_date: "2004" },
-  "Aileen Wuornos":       { status: "EXECUTED",     death_date: "2002" },
-  "Richard Ramirez":      { status: "DECEASED",     death_date: "2013" },
-  "Edmund Kemper":        { status: "IN PRISON" },
-  "Dennis Rader":         { status: "IN PRISON" },
-  "Albert Fish":          { status: "EXECUTED",     death_date: "1936" },
-  "David Berkowitz":      { status: "IN PRISON" },
-  "Samuel Little":        { status: "DECEASED",     death_date: "2020" },
-  "Rodney Alcala":        { status: "DECEASED",     death_date: "2021" },
-  "H.H. Holmes":          { status: "EXECUTED",     death_date: "1896" },
-  "Robert Pickton":       { status: "IN PRISON" },
-  "Dean Corll":           { status: "DECEASED",     death_date: "1973" },
-  "Ed Gein":              { status: "DECEASED",     death_date: "1984" },
-  "Alexander Pichushkin": { status: "IN PRISON" },
-  "Paul Bernardo":        { status: "IN PRISON" },
-  "Joachim Kroll":        { status: "DECEASED",     death_date: "1991" },
-  "Peter Sutcliffe":      { status: "DECEASED",     death_date: "2020" },
-  "Ian Brady":            { status: "DECEASED",     death_date: "2017" },
-  "Anatoly Onoprienko":   { status: "DECEASED",     death_date: "2013" },
-  "Gary Heidnik":         { status: "EXECUTED",     death_date: "1999" },
-  "Fred West":            { status: "DECEASED",     death_date: "1995" },
-  "Arthur Shawcross":     { status: "DECEASED",     death_date: "2008" },
-  "Wayne Williams":       { status: "IN PRISON" },
-  "Richard Cottingham":   { status: "IN PRISON" },
-  "Randy Kraft":          { status: "IN PRISON" },
-  "Robert Hansen":        { status: "DECEASED",     death_date: "2014" },
-  "Joseph DeAngelo":      { status: "IN PRISON" },
-  "Charles Cullen":       { status: "IN PRISON" },
-  "Marc Dutroux":         { status: "IN PRISON" },
-  "Bruce McArthur":       { status: "IN PRISON" },
-  "William Bonin":        { status: "EXECUTED",     death_date: "1996" },
-  "Donald Gaskins":       { status: "EXECUTED",     death_date: "1991" },
-  "David Parker Ray":     { status: "DECEASED",     death_date: "2002" },
-  "Tsutomu Miyazaki":     { status: "EXECUTED",     death_date: "2008" },
-  "Mikhail Popkov":       { status: "IN PRISON" },
-  "Jack the Ripper":      { status: "UNIDENTIFIED" },
-  "Zodiac Killer":        { status: "UNIDENTIFIED" },
-  "Dennis Nilsen":        { status: "DECEASED",     death_date: "2018" },
-  "Peter Kürten":         { status: "EXECUTED",     death_date: "1931" },
-};
+// ── ROTATION CLASSES ─────────────────────────────────────────
+const ROTATIONS = ['rotate-n1','rotate-p1','rotate-n2','rotate-p2','rotate-p1','rotate-n1'];
+
+// ── HANDWRITTEN ANNOTATIONS ───────────────────────────────────
+const ANNOTATIONS = [
+  "WHY?","see also.","again.","note this.","confirmed.","unknown.","?","look closer.","study this."
+];
+
+// ── STATE ─────────────────────────────────────────────────────
+let allData  = [];
+let letterQ  = 'ALL';
+let statusQ  = 'ALL';
+let searchQ  = '';
+let sortMode = 'name';
 
 // ── HELPERS ───────────────────────────────────────────────────
-function escHtml(s) {
-  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function extractVictimCount(text) {
-  if (!text) return null;
-  const patterns = [
-    /(?:killed|murdered|claimed|confessed to|convicted of(?:\s+killing)?|responsible for)(?:\s+at\s+least)?\s+(\d{1,3})\s+(?:people|women|men|children|victims?)/i,
-    /(\d{1,3})\s+(?:confirmed\s+)?(?:murders?|victims?|homicides?|killings?)/i,
-    /(?:at\s+least|more\s+than)\s+(\d{1,3})\s+(?:people|victims?|murders?)/i,
-  ];
-  for (const p of patterns) {
-    const m = text.match(p);
-    if (m) { const n = parseInt(m[1], 10); if (n >= 1 && n <= 999) return n; }
-  }
-  return null;
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function extractYears(text) {
@@ -158,55 +184,29 @@ function extractYears(text) {
 }
 
 function extractCountry(text) {
-  const countries = [
-    'American','British','Canadian','German','Russian','Australian',
-    'French','Italian','Scottish','English','Ukrainian','Colombian',
-    'Pakistani','Belgian','Japanese','South African'
+  const map = [
+    ['American', 'United States'], ['British', 'United Kingdom'],
+    ['Canadian', 'Canada'], ['German', 'Germany'],
+    ['Russian', 'Russia'], ['Australian', 'Australia'],
+    ['French', 'France'], ['Italian', 'Italy'],
+    ['Scottish', 'United Kingdom'], ['English', 'United Kingdom'],
+    ['Ukrainian', 'Ukraine'], ['Colombian', 'Colombia'],
+    ['Belgian', 'Belgium'], ['Japanese', 'Japan'],
+    ['South African', 'South Africa'], ['Polish', 'Poland'],
+    ['Dutch', 'Netherlands'],
   ];
-  for (const c of countries) {
-    if (text.includes(c)) return c;
+  for (const [adj, country] of map) {
+    if (text.includes(adj)) return country;
   }
   return null;
 }
 
-function extractNickname(text) {
-  // Looks for patterns like "known as "The X"" or "nicknamed "X""
-  const m = text.match(/(?:known as|nicknamed?|called)\s+[""]([^"""]+)["""]/i);
-  return m ? m[1] : null;
-}
-
-function extractMethod(text) {
-  const methods = [
-    ['Strangulation', /strangl/i],
-    ['Shooting',      /shot|shoot|firearm|gun/i],
-    ['Stabbing',      /stabb|knife|bludgeon/i],
-    ['Drowning',      /drown/i],
-    ['Poisoning',     /poison/i],
-    ['Hanging',       /hang/i],
-  ];
-  const found = [];
-  for (const [label, re] of methods) {
-    if (re.test(text) && found.length < 2) found.push(label);
-  }
-  return found.length ? found.join(', ') : null;
-}
-
-// ── STATE ─────────────────────────────────────────────────────
-let allData    = [];
-let sortMode   = 'name';
-let searchQ    = '';
-let letterQ    = 'ALL';
-let statusQ    = 'ALL';
-let viewMode   = 'grid';
-let caseIndex  = 0;
-
 // ── FETCH ─────────────────────────────────────────────────────
 async function fetchKiller(name) {
-  // If we have a fully static record, skip the API call
-  if (STATIC_RECORDS[name] && STATIC_RECORDS[name].image) {
-    const s = STATIC_RECORDS[name];
+  if (STATIC[name]) {
+    const s  = STATIC[name];
     const st = KNOWN_STATUS[name] || {};
-    return { ...s, status: st.status || s.status || 'UNKNOWN', death_date: st.death_date || s.death_date || null };
+    return { ...s, status: st.status || 'UNKNOWN', death_date: st.death_date || s.death_date || null };
   }
 
   const res = await fetch(
@@ -216,20 +216,18 @@ async function fetchKiller(name) {
   if (!d.extract || d.type === 'disambiguation' || d.extract.length < 80) return null;
 
   const st = KNOWN_STATUS[name] || {};
-  const override = STATIC_RECORDS[name] || {};
-
   return {
-    name:         override.name    || name,
-    nickname:     override.nickname || extractNickname(d.extract),
-    country:      override.country  || extractCountry(d.extract),
-    years_active: override.years_active || extractYears(d.extract),
-    confirmed_victims: override.confirmed_victims || extractVictimCount(d.extract),
-    method:       override.method  || extractMethod(d.extract),
-    image:        override.image   || d.thumbnail?.source || null,
-    description:  override.description || d.extract,
-    wikipedia_url: override.wikipedia_url || d.content_urls?.desktop?.page || null,
-    status:       st.status   || override.status || 'UNKNOWN',
-    death_date:   st.death_date || override.death_date || null,
+    name,
+    nickname:     KNOWN_NICKNAMES[name] || null,
+    years_active: extractYears(d.extract),
+    country:      extractCountry(d.extract),
+    // No victim count — too unreliable
+    method:       KNOWN_METHODS[name] || null, // only use curated methods
+    description:  d.extract,
+    wikipedia_url: d.content_urls?.desktop?.page || null,
+    image:        d.thumbnail?.source || null,
+    status:       st.status   || 'UNKNOWN',
+    death_date:   st.death_date || null,
   };
 }
 
@@ -240,26 +238,26 @@ async function loadData() {
       const json = await local.json();
       allData = json.map(k => {
         const st = KNOWN_STATUS[k.name] || {};
-        const or = STATIC_RECORDS[k.name] || {};
+        const sc = STATIC[k.name] || {};
         return {
-          name: k.name,
-          nickname: or.nickname || extractNickname(k.description),
-          country:  or.country  || extractCountry(k.description),
-          years_active: or.years_active || k.years_active || extractYears(k.description),
-          confirmed_victims: or.confirmed_victims || extractVictimCount(k.description) || k.confirmed_victims,
-          method:   or.method  || extractMethod(k.description),
-          image:    or.image   || (k.image?.startsWith('images/') ? '/'+k.image : k.image),
-          description: or.description || k.description,
-          wikipedia_url: or.wikipedia_url || k.wikipedia_url,
-          status:    st.status   || or.status || 'UNKNOWN',
-          death_date: st.death_date || or.death_date || null,
+          name:         sc.name || k.name,
+          nickname:     sc.nickname || KNOWN_NICKNAMES[k.name] || null,
+          years_active: sc.years_active || k.years_active || extractYears(k.description),
+          country:      sc.country || extractCountry(k.description || ''),
+          method:       sc.method || KNOWN_METHODS[k.name] || null,
+          description:  sc.description || k.description,
+          wikipedia_url: sc.wikipedia_url || k.wikipedia_url,
+          image:        sc.image || (k.image?.startsWith('images/') ? '/'+k.image : k.image),
+          status:       st.status || sc.status || 'UNKNOWN',
+          death_date:   st.death_date || sc.death_date || null,
         };
       }).filter(k => k.description && k.description.length > 60);
-      // Add static-only records not in local JSON
-      for (const [name, rec] of Object.entries(STATIC_RECORDS)) {
-        if (!allData.find(k => k.name === name)) {
-          const st = KNOWN_STATUS[name] || {};
-          allData.push({ ...rec, status: st.status || rec.status || 'UNKNOWN', death_date: st.death_date || rec.death_date });
+
+      // Add static-only entries not in JSON
+      for (const [nm, rec] of Object.entries(STATIC)) {
+        if (!allData.find(k => k.name === nm)) {
+          const st = KNOWN_STATUS[nm] || {};
+          allData.push({ ...rec, status: st.status || rec.status, death_date: st.death_date || rec.death_date });
         }
       }
       renderAll(); updateStats();
@@ -267,7 +265,6 @@ async function loadData() {
     }
   } catch (_) {}
 
-  // Wikipedia API batches
   const BATCH = 5;
   for (let i = 0; i < KILLERS.length; i += BATCH) {
     const settled = await Promise.allSettled(KILLERS.slice(i, i + BATCH).map(fetchKiller));
@@ -280,13 +277,12 @@ async function loadData() {
 // ── RENDER ─────────────────────────────────────────────────────
 function renderAll() {
   const container = document.getElementById('dataContainer');
-  container.className = `dataContainer${viewMode === 'list' ? ' list-view' : ''}`;
 
   let data = [...allData];
 
   if (letterQ !== 'ALL') {
-    const lastName = n => n.trim().split(/\s+/).pop().toUpperCase();
-    data = data.filter(k => lastName(k.name).startsWith(letterQ));
+    const ln = n => n.trim().split(/\s+/).pop().toUpperCase();
+    data = data.filter(k => ln(k.name).startsWith(letterQ));
   }
   if (statusQ !== 'ALL') {
     data = data.filter(k => k.status === statusQ);
@@ -295,190 +291,150 @@ function renderAll() {
     data = data.filter(k => k.name.toLowerCase().includes(searchQ.toLowerCase()));
   }
 
-  if (sortMode === 'victims') {
-    data.sort((a, b) => (b.confirmed_victims ?? 0) - (a.confirmed_victims ?? 0));
-  } else {
-    const ln = n => n.trim().split(/\s+/).pop().toLowerCase();
-    data.sort((a, b) => ln(a.name).localeCompare(ln(b.name)));
-  }
+  const ln = n => n.trim().split(/\s+/).pop().toLowerCase();
+  data.sort((a, b) => ln(a.name).localeCompare(ln(b.name)));
 
   document.getElementById('visibleCount').textContent = data.length;
-  document.getElementById('footerCount').textContent = `${data.length} RECORDS DISPLAYED`;
 
   if (!data.length && allData.length > 0) {
-    container.innerHTML = `<div class="empty-state"><p>NO CASES MATCH FILTERS</p></div>`;
+    container.innerHTML = `<div class="empty-state"><p>— no entries found —</p></div>`;
     return;
   }
   if (!data.length) {
-    container.innerHTML = `<div class="loading-state"><div class="loader-bar"><div class="loader-fill"></div></div><p>RETRIEVING CASE FILES</p></div>`;
+    container.innerHTML = `<div class="loading-state"><p class="loading-text">gathering files<span class="dots">...</span></p></div>`;
     return;
   }
 
-  container.innerHTML = data.map((k, i) =>
-    viewMode === 'list' ? buildListCard(k, i + 1) : buildGridCard(k, i + 1)
-  ).join('');
+  container.innerHTML = data.map((k, i) => buildEntry(k, i + 1)).join('');
 }
 
-// ── STATUS TAG HTML ───────────────────────────────────────────
-function statusTagHtml(k) {
+// ── STATUS LABEL ──────────────────────────────────────────────
+function statusLabel(k) {
   const s = k.status || 'UNKNOWN';
-  let cls = '';
+  let cls = 'entry-status ';
   let label = s;
 
   if (s === 'EXECUTED') {
-    cls = 'status-executed';
-    label = k.death_date ? `EXECUTED ${k.death_date}` : 'EXECUTED';
+    cls += 'status-executed';
+    label = k.death_date ? `EXECUTED — ${k.death_date}` : 'EXECUTED';
   } else if (s === 'IN PRISON') {
-    cls = 'status-prison';
-    label = 'IN PRISON';
+    cls += 'status-prison';
+    label = 'IMPRISONED';
   } else if (s === 'DECEASED') {
-    cls = 'status-deceased';
-    label = k.death_date ? `DECEASED ${k.death_date}` : 'DECEASED';
+    cls += 'status-deceased';
+    label = k.death_date ? `DECEASED — ${k.death_date}` : 'DECEASED';
   } else if (s === 'UNIDENTIFIED') {
-    cls = 'status-unidentified';
-    label = 'UNIDENTIFIED';
+    cls += 'status-unidentified';
+    label = 'IDENTITY UNKNOWN';
+  } else {
+    cls += 'status-deceased';
+    label = 'STATUS UNKNOWN';
   }
-
-  return `<span class="tag ${cls}">${escHtml(label)}</span>`;
+  return `<span class="${cls}">${esc(label)}</span>`;
 }
 
-// ── GRID CARD ─────────────────────────────────────────────────
-function buildGridCard(k, rank) {
+// ── NO-PHOTO SVG ──────────────────────────────────────────────
+function noPhotoSvg() {
+  return `
+  <div class="no-photo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 240">
+      <rect width="180" height="240" fill="#D4C9B5"/>
+      <defs>
+        <pattern id="hatch2" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+          <rect width="20" height="20" fill="#D4C9B5"/>
+          <rect y="9" width="20" height="2" fill="#C8BBAA" opacity="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="180" height="240" fill="url(#hatch2)"/>
+      <g transform="rotate(-6,90,90)">
+        <rect x="-20" y="85" width="230" height="28" fill="${'#CBBFA5'}"/>
+        <text font-family="monospace" font-size="8" font-weight="bold" fill="#2B2620" letter-spacing="2" y="103" x="4">NO IMAGE ON FILE · NO IMAGE</text>
+      </g>
+      <g transform="rotate(4,90,150)">
+        <rect x="-20" y="140" width="230" height="22" fill="#5A1E1E" opacity="0.6"/>
+        <text font-family="monospace" font-size="7" font-weight="bold" fill="#EFE6D6" letter-spacing="2" y="155" x="4">DO NOT CROSS · DO NOT CROSS</text>
+      </g>
+    </svg>
+  </div>`;
+}
+
+// ── BUILD ENTRY ───────────────────────────────────────────────
+function buildEntry(k, rank) {
+  const rot      = ROTATIONS[rank % ROTATIONS.length];
+  const annotation = rank % 5 === 0 ? ANNOTATIONS[rank % ANNOTATIONS.length] : '';
+
   const imgHtml = k.image
-    ? `<img src="${escHtml(k.image)}" alt="${escHtml(k.name)}" loading="lazy" />`
-    : noImgSvg();
+    ? `<div class="photo-tape ${rot}"><img src="${esc(k.image)}" alt="${esc(k.name)}" loading="lazy" /></div>`
+    : noPhotoSvg();
 
   const nicknameHtml = k.nickname
-    ? `<p class="card-nickname">"${escHtml(k.nickname)}"</p>` : '';
+    ? `<p class="entry-nickname">"${esc(k.nickname)}"</p>` : '';
 
-  const metaRows = [
-    k.years_active ? `<div class="card-meta-row"><span class="meta-key">ACTIVE</span><span class="meta-val">${escHtml(k.years_active)}</span></div>` : '',
-    k.country      ? `<div class="card-meta-row"><span class="meta-key">COUNTRY</span><span class="meta-val">${escHtml(k.country)}</span></div>` : '',
-    k.method       ? `<div class="card-meta-row"><span class="meta-key">METHOD</span><span class="meta-val">${escHtml(k.method)}</span></div>` : '',
-    k.confirmed_victims != null ? `<div class="card-meta-row"><span class="meta-key">VICTIMS</span><span class="meta-val">${k.confirmed_victims}</span></div>` : '',
-  ].filter(Boolean).join('');
+  // Facts — only show what we actually have, NO victim count
+  const facts = [];
+  if (k.years_active) facts.push(`<div class="fact-row"><span class="fact-key">ACTIVE</span><span class="fact-val">${esc(k.years_active)}</span></div>`);
+  if (k.country)      facts.push(`<div class="fact-row"><span class="fact-key">COUNTRY</span><span class="fact-val">${esc(k.country)}</span></div>`);
+  if (k.method)       facts.push(`<div class="fact-row"><span class="fact-key">METHOD</span><span class="fact-val method-val">${esc(k.method)}</span></div>`);
 
-  const wikiHtml = k.wikipedia_url
-    ? `<a href="${escHtml(k.wikipedia_url)}" target="_blank" rel="noopener noreferrer" class="wiki-link">WIKIPEDIA ↗</a>` : '';
-
-  return `
-    <article class="case-card">
-      <figure class="card-figure">${imgHtml}</figure>
-      <div class="card-body">
-        <span class="card-case-num">CASE #${String(rank).padStart(3,'0')}</span>
-        <h2 class="card-name">${escHtml(k.name)}</h2>
-        ${nicknameHtml}
-        <div class="card-tags">
-          ${statusTagHtml(k)}
-          ${k.country ? `<span class="tag country">${escHtml(k.country.toUpperCase())}</span>` : ''}
-        </div>
-        ${metaRows ? `<div class="card-meta">${metaRows}</div>` : ''}
-        <p class="card-desc">${escHtml(k.description)}</p>
-        <div class="card-footer">${wikiHtml}</div>
-      </div>
-    </article>`;
-}
-
-// ── LIST CARD ─────────────────────────────────────────────────
-function buildListCard(k, rank) {
-  const imgHtml = k.image
-    ? `<img src="${escHtml(k.image)}" alt="${escHtml(k.name)}" loading="lazy" />`
-    : noImgSvg();
+  const annotationHtml = annotation
+    ? `<span class="entry-annotation">${esc(annotation)}</span>` : '<span></span>';
 
   const wikiHtml = k.wikipedia_url
-    ? `<a href="${escHtml(k.wikipedia_url)}" target="_blank" rel="noopener noreferrer" class="wiki-link">WIKI ↗</a>` : '';
+    ? `<a href="${esc(k.wikipedia_url)}" target="_blank" rel="noopener noreferrer" class="wiki-link">open record ↗</a>` : '<span></span>';
 
   return `
-    <article class="case-card">
-      <figure class="card-figure">${imgHtml}</figure>
-      <div class="card-body">
-        <div class="card-header-row" style="display:flex;flex-direction:column;gap:2px;min-width:180px;flex-shrink:0;">
-          <h2 class="card-name">${escHtml(k.name)}</h2>
-          ${k.years_active ? `<span style="font-size:0.65rem;color:var(--gray3);letter-spacing:0.06em;">${escHtml(k.years_active)}</span>` : ''}
+    <div class="entry">
+      <div class="entry-paper">
+        <div class="entry-spread">
+
+          <!-- LEFT: photo + annotation -->
+          <div class="entry-photo-col">
+            ${imgHtml}
+            ${annotation ? `<p class="photo-annotation">${esc(annotation)}</p>` : ''}
+          </div>
+
+          <!-- RIGHT: text -->
+          <div class="entry-text-col">
+            <span class="entry-case-num">FILE NO. ${String(rank).padStart(3,'0')}</span>
+            <h2 class="entry-name">${esc(k.name)}</h2>
+            ${nicknameHtml}
+            ${statusLabel(k)}
+            <div class="entry-rule"></div>
+            ${facts.length ? `<div class="entry-facts">${facts.join('')}</div>` : ''}
+            <p class="entry-desc">${esc(k.description)}</p>
+            <div class="entry-footer">
+              ${wikiHtml}
+              ${annotationHtml}
+            </div>
+          </div>
+
         </div>
-        <p class="card-desc">${escHtml(k.description)}</p>
-        <div class="card-tags">${statusTagHtml(k)}</div>
-        <div class="card-footer">${wikiHtml}</div>
       </div>
-    </article>`;
-}
-
-// ── PLACEHOLDER SVG ───────────────────────────────────────────
-function noImgSvg() {
-  return `
-  <svg class="no-img-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220">
-    <rect width="360" height="220" fill="#F0F0F0"/>
-    <defs>
-      <pattern id="hatch" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
-        <rect width="30" height="30" fill="#F0F0F0"/>
-        <rect y="13" width="30" height="4" fill="#E0E0E0"/>
-      </pattern>
-    </defs>
-    <rect width="360" height="220" fill="url(#hatch)"/>
-    <g transform="rotate(-5,180,80)">
-      <rect x="-40" y="60" width="460" height="34" fill="#0066FF"/>
-      <text font-family="monospace" font-size="11" font-weight="900" fill="#FFFFFF" letter-spacing="4" y="82" x="-10">
-        DO NOT CROSS · NO IMAGE ON FILE · DO NOT CROSS · NO IMAGE ON FILE ·
-      </text>
-    </g>
-    <g transform="rotate(4,180,145)">
-      <rect x="-40" y="128" width="460" height="34" fill="#000000"/>
-      <text font-family="monospace" font-size="11" font-weight="900" fill="#FFFFFF" letter-spacing="4" y="150" x="-10">
-        · NO IMAGE ON FILE · DO NOT CROSS · NO IMAGE ON FILE · DO NOT CROSS
-      </text>
-    </g>
-  </svg>`;
+    </div>`;
 }
 
 // ── STATS ──────────────────────────────────────────────────────
 function updateStats() {
-  document.getElementById('totalCount').textContent   = allData.length;
-  document.getElementById('totalVictims').textContent = allData.reduce((s, k) => s + (k.confirmed_victims ?? 0), 0).toLocaleString();
+  document.getElementById('totalCount').textContent = allData.length;
 }
 
-// ── LIVE TIME ─────────────────────────────────────────────────
-function updateTime() {
-  const el = document.getElementById('liveTime');
-  if (el) el.textContent = new Date().toUTCString().replace('GMT','UTC');
-}
-setInterval(updateTime, 1000);
-updateTime();
-
-// ── CONTROLS ──────────────────────────────────────────────────
+// ── WIRE CONTROLS ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
 
-  document.querySelectorAll('.az-btn').forEach(btn => {
+  document.querySelectorAll('.az-tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.az-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.az-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       letterQ = btn.dataset.letter;
       renderAll();
     });
   });
 
-  document.querySelectorAll('[data-sort]').forEach(btn => {
+  document.querySelectorAll('.status-tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      sortMode = btn.dataset.sort;
-      renderAll();
-    });
-  });
-
-  document.querySelectorAll('[data-status]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-status]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.status-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       statusQ = btn.dataset.status;
-      renderAll();
-    });
-  });
-
-  document.querySelectorAll('[data-view]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      viewMode = btn.dataset.view;
       renderAll();
     });
   });
