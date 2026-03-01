@@ -4,8 +4,8 @@
 
 /* ── LOCAL FONTS ───────────────────────────────────────────── */
 @font-face {
-  font-family: 'DK Face Your Fears';
-  src: url('./fonts/DK Face Your Fears.ttf') format('truetype');
+  font-family: 'BlackDahlia';
+  src: url('./fonts/BlackDahlia.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -127,10 +127,10 @@
   /* SLOT 2: BODY FONT — descriptions, facts, body text         */
   --f-body:        'Rubik', Georgia, serif;
   /* SLOT 3: BG WORDS FONT — the manic background text layer    */
-  --f-bg-words:    'DK Face Your Fears', cursive;
+  --f-bg-words:    'BlackDahlia', cursive;
   /* Internal supporting fonts (italic dates, handwritten notes)*/
   --f-serif-ital:  'Rubik', Georgia, serif;
-  --f-hand:        'DK Face Your Fears', cursive;
+  --f-hand:        'BlackDahlia', cursive;
 }
 
 /* ── RESET ─────────────────────────────────────────────────── */
@@ -195,13 +195,13 @@ body {
 }
 
 .bg-scratch {
-  font-family: 'DK Face Your Fears', cursive;
+  font-family: 'BlackDahlia', cursive;
   font-size: 13px;
   fill: rgba(4, 2, 1, 0.22);
 }
 
 .bg-scratch-lg {
-  font-family: 'DK Face Your Fears', cursive;
+  font-family: 'BlackDahlia', cursive;
   font-size: 22px;
   fill: rgba(4, 2, 1, 0.18);
   letter-spacing: 0.05em;
@@ -612,7 +612,7 @@ body > *:not(.grain-overlay):not(.vignette):not(.bg-mania):not(.blood-layer):not
   font-family: var(--f-body); font-size: 0.875rem;
   line-height: 1.8; color: var(--ink-faded);
   border-top: 1px solid var(--paper-darker); padding-top: 12px;
-  display: -webkit-box; -webkit-line-clamp: 4;
+  display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4;
   -webkit-box-orient: vertical; overflow: hidden;
 }
 
