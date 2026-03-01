@@ -25,10 +25,13 @@
     <!-- LEDGER COVER / MASTHEAD -->
     <header class="masthead">
       <div class="masthead-inner">
-        <p class="ledger-label">PRIVATE COLLECTION — VOL. I</p>
-        <h1 class="ledger-title">THE KEEPSAKE<br>LEDGER</h1>
+        <p class="ledger-label">PRIVATE COLLECTION — VOL. I &nbsp;&nbsp;&nbsp; <span class="hand-note">do not open</span></p>
+        <h1 class="ledger-title">THE KEEP<span class="title-scratch">SAKE</span><br>LEDGER</h1>
         <div class="ledger-rule"></div>
-        <p class="ledger-subtitle">A documented record of serial homicide cases.<br>Assembled from public record. Handle with discretion.</p>
+        <p class="ledger-subtitle">A documented record of serial homicide cases.<br>Assembled from public record. <em>Handle with discretion.</em></p>
+        <!-- Handwritten margin notes -->
+        <p class="margin-scrawl margin-scrawl--1">they always<br>leave a pattern</p>
+        <p class="margin-scrawl margin-scrawl--2">why do i keep<br>coming back here</p>
         <div class="ledger-stats">
           <span class="stat-item"><span class="stat-num" id="totalCount">—</span> entries</span>
           <span class="stat-sep">·</span>
@@ -36,6 +39,9 @@
         </div>
         <!-- Coffee ring decoration -->
         <div class="coffee-ring" aria-hidden="true"></div>
+        <!-- Red X marks -->
+        <div class="red-x red-x--1" aria-hidden="true">✕</div>
+        <div class="red-x red-x--2" aria-hidden="true">✕</div>
       </div>
     </header>
 
@@ -63,10 +69,15 @@
             <button class="az-tab" data-letter="N">n</button>
             <button class="az-tab" data-letter="O">o</button>
             <button class="az-tab" data-letter="P">p</button>
+            <button class="az-tab" data-letter="Q">q</button>
             <button class="az-tab" data-letter="R">r</button>
             <button class="az-tab" data-letter="S">s</button>
             <button class="az-tab" data-letter="T">t</button>
+            <button class="az-tab" data-letter="U">u</button>
+            <button class="az-tab" data-letter="V">v</button>
             <button class="az-tab" data-letter="W">w</button>
+            <button class="az-tab" data-letter="X">x</button>
+            <button class="az-tab" data-letter="Y">y</button>
             <button class="az-tab" data-letter="Z">z</button>
           </div>
         </div>
@@ -103,6 +114,12 @@
         <span class="footer-source">Source: Wikipedia REST API · For study only</span>
       </div>
     </footer>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top" title="back to top">
+      <span class="btt-arrow">↑</span>
+      <span class="btt-label">top</span>
+    </button>
 
   </body>
 </html>

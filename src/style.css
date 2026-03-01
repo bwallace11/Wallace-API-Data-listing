@@ -1,44 +1,30 @@
 /* ============================================================
    THE KEEPSAKE LEDGER — style.css
-   Aged paper journal. Hand-assembled. Slightly wrong.
-   Colors: Aged paper / dried blood / faded ink
-   Fonts: Special Elite · Cormorant Garamond · Source Serif 4 · Caveat
+   Aged obsessive journal. Hand-assembled. Slightly unhinged.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Caveat:wght@400;600&display=swap');
 
-/* ── Variables ─────────────────────────────────────────────── */
 :root {
-  /* Paper */
-  --paper:        #EFE6D6;
-  --paper-dark:   #E6D9C4;
-  --paper-darker: #D9C9B2;
-  --paper-light:  #F5EFE4;
-
-  /* Ink */
-  --ink:          #2B2620;
-  --ink-faded:    #6F665C;
-  --ink-very-faded: #A09487;
-
-  /* Danger / blood */
-  --blood:        #5A1E1E;
-  --blood-bright: #8E2A2A;
-
-  /* Ephemera */
-  --tape:         #CBBFA5;
-  --tape-dark:    rgba(203,191,165,0.7);
-  --paperclip:    #8B8B8B;
-
-  /* Fonts */
+  --paper:         #EFE6D6;
+  --paper-dark:    #E6D9C4;
+  --paper-darker:  #D9C9B2;
+  --paper-stained: #E0D4BC;
+  --ink:           #2B2620;
+  --ink-faded:     #6F665C;
+  --ink-very-faded:#A09487;
+  --blood:         #5A1E1E;
+  --blood-bright:  #8E2A2A;
+  --tape:          #CBBFA5;
+  --tape-dark:     rgba(203,191,165,0.72);
+  --paperclip:     #8B8B8B;
   --f-type:       'Special Elite', 'Courier New', monospace;
   --f-serif-ital: 'Cormorant Garamond', Georgia, serif;
   --f-body:       'Source Serif 4', Georgia, serif;
   --f-hand:       'Caveat', cursive;
 }
 
-/* ── Reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { font-size: 16px; scroll-behavior: smooth; }
 
 body {
@@ -47,97 +33,118 @@ body {
   font-family: var(--f-body);
   min-height: 100vh;
   line-height: 1.6;
-  cursor: default;
 }
 
-/* ── GRAIN OVERLAY ─────────────────────────────────────────── */
+/* ── GRAIN + VIGNETTE ─────────────────────────────────────── */
 .grain-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
+  position: fixed; inset: 0; z-index: 1000; pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
-
 .vignette {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(30,20,10,0.35) 100%);
+  position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(20,12,5,0.45) 100%);
 }
 
-/* ── MASTHEAD ──────────────────────────────────────────────── */
+/* ── MASTHEAD ─────────────────────────────────────────────── */
 .masthead {
   background: var(--paper);
-  border-bottom: 1px solid var(--paper-darker);
-  padding: 120px 0 80px;
+  border-bottom: 2px solid var(--paper-darker);
+  padding: 100px 0 70px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
-/* Subtle edge stain on masthead */
+/* Ragged top edge — torn paper feel */
 .masthead::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 6px;
+  height: 8px;
   background: linear-gradient(180deg, var(--paper-darker) 0%, transparent 100%);
 }
 
+/* Dark stain bleed at bottom */
 .masthead::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 3px;
+  bottom: -1px; left: 0; right: 0;
+  height: 4px;
   background: linear-gradient(0deg, var(--paper-darker) 0%, transparent 100%);
 }
 
 .masthead-inner {
   max-width: 780px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 48px;
   position: relative;
 }
 
 .ledger-label {
   font-family: var(--f-type);
-  font-size: 0.65rem;
-  letter-spacing: 0.28em;
+  font-size: 0.62rem;
+  letter-spacing: 0.26em;
   color: var(--ink-faded);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* "do not open" — small Caveat scrawl inline */
+.hand-note {
+  font-family: var(--f-hand);
+  font-size: 0.85rem;
+  color: var(--blood);
+  letter-spacing: 0;
+  transform: rotate(-2deg);
+  display: inline-block;
+  opacity: 0.8;
 }
 
 .ledger-title {
   font-family: var(--f-type);
-  font-size: clamp(2.8rem, 7vw, 5.2rem);
-  letter-spacing: 0.06em;
-  line-height: 0.95;
+  font-size: clamp(3rem, 8vw, 5.6rem);
+  letter-spacing: 0.05em;
+  line-height: 0.92;
   color: var(--ink);
-  margin-bottom: 28px;
-  /* Subtle irregular baseline via text-shadow */
-  text-shadow: 0.5px 0.3px 0 rgba(43,38,32,0.12);
+  margin-bottom: 24px;
+  /* Misalignment: second line shifted */
+  position: relative;
+}
+
+/* The word SAKE crossed out / glitchy */
+.title-scratch {
+  position: relative;
+  color: var(--ink);
+}
+.title-scratch::after {
+  content: '';
+  position: absolute;
+  left: -2px; right: -2px;
+  top: 50%;
+  height: 3px;
+  background: var(--blood);
+  transform: rotate(-1deg);
+  opacity: 0.6;
 }
 
 .ledger-rule {
   width: 100%;
   height: 1px;
   background: var(--ink-faded);
-  margin-bottom: 24px;
-  opacity: 0.4;
+  margin-bottom: 20px;
+  opacity: 0.35;
   position: relative;
 }
-
-/* Second thinner rule */
 .ledger-rule::after {
   content: '';
   position: absolute;
-  top: 3px; left: 0; right: 0;
+  top: 4px; left: 0; right: 60%;
   height: 1px;
-  background: var(--ink-faded);
-  opacity: 0.25;
+  background: var(--blood);
+  opacity: 0.2;
 }
 
 .ledger-subtitle {
@@ -145,119 +152,147 @@ body {
   font-style: italic;
   font-size: 1rem;
   color: var(--ink-faded);
-  line-height: 1.7;
-  margin-bottom: 32px;
+  line-height: 1.75;
+  margin-bottom: 28px;
+  max-width: 52ch;
+}
+
+/* Margin scrawls — handwritten notes floating in margins */
+.margin-scrawl {
+  font-family: var(--f-hand);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--blood);
+  opacity: 0.6;
+  position: absolute;
+  pointer-events: none;
+}
+
+.margin-scrawl--1 {
+  right: -80px;
+  top: 60px;
+  transform: rotate(4deg);
+  text-align: right;
+  font-size: 0.78rem;
+}
+
+.margin-scrawl--2 {
+  right: -80px;
+  top: 160px;
+  transform: rotate(-3deg);
+  font-size: 0.72rem;
+  color: var(--ink-faded);
+  opacity: 0.5;
+}
+
+/* Red X marks */
+.red-x {
+  position: absolute;
+  font-family: var(--f-hand);
+  font-size: 1.4rem;
+  color: var(--blood-bright);
+  opacity: 0.35;
+  pointer-events: none;
+  line-height: 1;
+}
+.red-x--1 { top: 30px; right: 48px; transform: rotate(8deg); font-size: 1.8rem; }
+.red-x--2 { bottom: 30px; right: 90px; transform: rotate(-5deg); opacity: 0.2; }
+
+/* Coffee ring */
+.coffee-ring {
+  position: absolute;
+  top: 10px; right: 80px;
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  border: 2px solid rgba(140,100,50,0.15);
+  box-shadow: inset 0 0 0 1px rgba(140,100,50,0.07);
+  pointer-events: none;
+}
+.coffee-ring::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(140,100,50,0.09);
 }
 
 .ledger-stats {
   font-family: var(--f-hand);
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--ink-faded);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
-
 .stat-sep { color: var(--ink-very-faded); }
-
 .stat-num {
   font-family: var(--f-type);
   font-size: 1.1rem;
   color: var(--blood-bright);
 }
 
-/* Coffee ring decoration */
-.coffee-ring {
-  position: absolute;
-  top: -20px;
-  right: 40px;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 2px solid rgba(160,130,80,0.18);
-  box-shadow: 0 0 0 1px rgba(160,130,80,0.08);
-  pointer-events: none;
-}
-
-.coffee-ring::after {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
-  border: 1px solid rgba(160,130,80,0.08);
-}
-
-/* ── FILTER SECTION ────────────────────────────────────────── */
+/* ── FILTER SECTION ───────────────────────────────────────── */
 .filter-section {
-  background: var(--paper-dark);
+  background: var(--paper-stained);
   border-bottom: 1px solid var(--paper-darker);
-  border-top: 1px solid var(--paper-darker);
-  padding: 32px 0;
+  padding: 24px 0 20px;
   position: sticky;
   top: 0;
-  z-index: 100;
-}
-
-/* Subtle upper stain line */
-.filter-section::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--paper-darker) 30%, var(--paper-darker) 70%, transparent 100%);
+  z-index: 200;
+  /* Subtle stain lines */
+  background-image:
+    linear-gradient(180deg, rgba(43,38,32,0.025) 0%, transparent 40%),
+    linear-gradient(0deg, rgba(43,38,32,0.02) 0%, transparent 40%);
 }
 
 .filter-inner {
   max-width: 780px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 48px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
 .filter-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 
 .filter-head {
   font-family: var(--f-serif-ital);
   font-style: italic;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--ink-very-faded);
   white-space: nowrap;
-  min-width: 130px;
+  min-width: 128px;
+  padding-top: 4px;
 }
 
-/* A–Z tabs */
+/* A–Z tabs — Caveat handwritten, all lowercase */
 .az-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px;
+  gap: 1px;
+  row-gap: 2px;
 }
 
 .az-tab {
   background: transparent;
   border: none;
   font-family: var(--f-hand);
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--ink-faded);
-  padding: 2px 7px;
+  padding: 1px 8px;
   cursor: pointer;
-  transition: color 120ms;
+  transition: color 100ms;
   position: relative;
+  line-height: 1.6;
 }
-
 .az-tab:hover { color: var(--ink); }
-
-.az-tab.active {
-  color: var(--blood-bright);
-}
-
-/* Red pencil underline for active */
+.az-tab.active { color: var(--blood-bright); font-size: 1.1rem; }
 .az-tab.active::after {
   content: '';
   position: absolute;
@@ -265,42 +300,28 @@ body {
   height: 2px;
   background: var(--blood-bright);
   border-radius: 1px;
-  opacity: 0.75;
+  opacity: 0.8;
 }
+/* Letters that have no entries — dimmed */
+.az-tab.empty { color: var(--ink-very-faded); opacity: 0.4; cursor: default; }
 
 /* Status tabs */
-.status-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+.status-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .status-tab {
   background: transparent;
   border: 1px solid var(--tape);
   font-family: var(--f-hand);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--ink-faded);
-  padding: 3px 12px;
+  padding: 2px 12px 3px;
   cursor: pointer;
   transition: all 120ms;
-  position: relative;
 }
+.status-tab:hover { border-color: var(--ink-faded); color: var(--ink); }
+.status-tab.active { background: var(--blood); border-color: var(--blood); color: #EFE6D6; }
 
-.status-tab:hover {
-  border-color: var(--ink-faded);
-  color: var(--ink);
-}
-
-.status-tab.active {
-  background: var(--blood);
-  border-color: var(--blood);
-  color: #EFE6D6;
-}
-
-/* Search input */
-.search-row { align-items: center; }
-
+/* Search */
 .ledger-search {
   background: transparent;
   border: none;
@@ -308,137 +329,160 @@ body {
   font-family: var(--f-hand);
   font-size: 1rem;
   color: var(--ink);
-  padding: 4px 0;
+  padding: 2px 0;
   outline: none;
-  width: 220px;
+  width: 200px;
   transition: border-color 150ms;
 }
-
 .ledger-search::placeholder { color: var(--ink-very-faded); font-style: italic; }
 .ledger-search:focus { border-bottom-color: var(--blood-bright); }
 
 /* ── LOADING ───────────────────────────────────────────────── */
 .loading-state {
-  max-width: 780px;
-  margin: 80px auto;
-  padding: 0 40px;
-  text-align: center;
+  max-width: 780px; margin: 80px auto; padding: 0 48px; text-align: center;
 }
-
 .loading-text {
-  font-family: var(--f-type);
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
-  color: var(--ink-faded);
+  font-family: var(--f-type); font-size: 0.85rem; letter-spacing: 0.14em; color: var(--ink-faded);
 }
-
 .dots { animation: blink 1.4s step-end infinite; }
 @keyframes blink { 0%,100%{opacity:1} 33%{opacity:0} 66%{opacity:0.4} }
 
 .empty-state {
-  max-width: 780px;
-  margin: 80px auto;
-  padding: 0 40px;
-  text-align: center;
-  font-family: var(--f-hand);
-  font-size: 1.1rem;
-  color: var(--ink-faded);
+  max-width: 780px; margin: 80px auto; padding: 0 48px; text-align: center;
+  font-family: var(--f-hand); font-size: 1.1rem; color: var(--ink-faded);
 }
 
-/* ── LEDGER PAGES (main container) ─────────────────────────── */
+/* ── LEDGER PAGES ─────────────────────────────────────────── */
 .ledger-pages {
   max-width: 780px;
   margin: 0 auto;
-  padding: 64px 40px 80px;
+  padding: 56px 48px 80px;
 }
 
-/* ── ENTRY (one killer profile = one journal spread) ────────── */
+/* ── LETTER DIVIDER (shows when A-Z active in "all" view) ──── */
+.letter-divider {
+  font-family: var(--f-hand);
+  font-size: 4rem;
+  color: var(--paper-darker);
+  line-height: 1;
+  margin: 48px 0 -20px -8px;
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+}
+.letter-divider::after {
+  content: '';
+  position: absolute;
+  bottom: 8px; left: 52px; right: 0;
+  height: 1px;
+  background: var(--paper-darker);
+  opacity: 0.8;
+}
+
+/* ── ENTRY ────────────────────────────────────────────────── */
 .entry {
   position: relative;
-  margin-bottom: 64px;
-  animation: fadeIn 0.4s ease both;
+  margin-bottom: 56px;
+  animation: pageIn 0.45s ease both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px) rotate(0.1deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(0deg); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
+/* Alternating paper tones */
 .entry:nth-child(odd)  .entry-paper { background: var(--paper); }
 .entry:nth-child(even) .entry-paper { background: var(--paper-dark); }
+/* Every 7th entry gets a slightly stained look */
+.entry:nth-child(7n)   .entry-paper { background: var(--paper-stained); }
 
 .entry-paper {
   border: 1px solid var(--paper-darker);
-  padding: 32px;
+  padding: 28px 28px 24px;
   position: relative;
-  /* Very subtle shadow for "stacked pages" look */
+  /* Stacked pages shadow */
   box-shadow:
-    2px 3px 0 -1px var(--paper-darker),
-    4px 6px 0 -2px rgba(43,38,32,0.06);
+    3px 4px 0 -1px var(--paper-darker),
+    6px 8px 0 -3px rgba(43,38,32,0.04),
+    0 1px 3px rgba(43,38,32,0.06);
 }
 
-/* Bottom edge stain */
+/* Torn bottom edge effect */
 .entry-paper::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--paper-darker) 20%, var(--paper-darker) 80%, transparent 100%);
-  opacity: 0.5;
+  bottom: -1px; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%, var(--paper-darker) 8%,
+    transparent 15%, var(--paper-darker) 25%,
+    transparent 35%, var(--paper-darker) 60%,
+    transparent 72%, var(--paper-darker) 85%,
+    transparent 100%
+  );
+  opacity: 0.45;
 }
 
-/* ── SPREAD LAYOUT: photo left, text right ──────────────────── */
+/* Inline margin note on specific entries */
+.entry-margin-note {
+  position: absolute;
+  right: -92px;
+  top: 20px;
+  font-family: var(--f-hand);
+  font-size: 0.75rem;
+  color: var(--blood);
+  opacity: 0.55;
+  transform: rotate(3deg);
+  line-height: 1.4;
+  text-align: center;
+  width: 80px;
+  pointer-events: none;
+}
+
+/* ── SPREAD ───────────────────────────────────────────────── */
 .entry-spread {
   display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 32px;
+  grid-template-columns: 170px 1fr;
+  gap: 28px;
   align-items: start;
 }
 
-/* ── PHOTO SIDE ─────────────────────────────────────────────── */
+/* ── PHOTO COLUMN ─────────────────────────────────────────── */
 .entry-photo-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.photo-frame {
-  position: relative;
-  width: 100%;
-}
-
-/* The "taped on" effect using pseudo-elements */
+/* Taped-on photo */
 .photo-tape {
   position: relative;
   display: block;
+  width: 100%;
 }
 
-/* Tape strips on corners */
-.photo-tape::before,
+/* Masking tape top-left */
+.photo-tape::before {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  top: -5px; left: 6px;
+  width: 38px; height: 13px;
+  background: var(--tape-dark);
+  transform: rotate(-3deg);
+  box-shadow: 0 1px 2px rgba(43,38,32,0.12);
+}
+/* Masking tape bottom-right */
 .photo-tape::after {
   content: '';
   position: absolute;
-  z-index: 2;
+  z-index: 3;
+  bottom: -5px; right: 6px;
+  width: 38px; height: 13px;
   background: var(--tape-dark);
-  width: 36px;
-  height: 12px;
-}
-
-/* Top-left tape */
-.photo-tape::before {
-  top: -4px;
-  left: 8px;
-  transform: rotate(-2deg);
-  box-shadow: 0 1px 2px rgba(43,38,32,0.1);
-}
-
-/* Bottom-right tape */
-.photo-tape::after {
-  bottom: -4px;
-  right: 8px;
-  transform: rotate(1deg);
-  box-shadow: 0 1px 2px rgba(43,38,32,0.1);
+  transform: rotate(2deg);
+  box-shadow: 0 1px 2px rgba(43,38,32,0.12);
 }
 
 .photo-tape img {
@@ -447,125 +491,107 @@ body {
   aspect-ratio: 3/4;
   object-fit: contain;
   object-position: top center;
-  background: #D4C9B5;
-  filter: sepia(25%) contrast(1.05);
-  transition: filter 200ms, transform 200ms;
-  /* Slight rotation — every entry rotates differently via JS class */
+  background: #CFC5B0;
+  filter: sepia(30%) contrast(1.06) brightness(0.97);
+  transition: filter 250ms, transform 250ms;
 }
+
+/* Rotation per entry */
+.rotate-n1 { transform: rotate(-1.4deg); }
+.rotate-n2 { transform: rotate(-0.7deg); }
+.rotate-p1 { transform: rotate(0.9deg); }
+.rotate-p2 { transform: rotate(1.8deg); }
+.rotate-p3 { transform: rotate(-2.1deg); }
 
 .entry:hover .photo-tape img {
-  filter: sepia(10%) contrast(1.08);
-  transform: scale(1.02);
+  filter: sepia(8%) contrast(1.1);
+  transform: scale(1.03) translateY(-2px);
 }
 
-/* Rotation classes applied per entry in JS */
-.rotate-n1 { transform: rotate(-1.2deg); }
-.rotate-n2 { transform: rotate(-0.6deg); }
-.rotate-p1 { transform: rotate(0.8deg); }
-.rotate-p2 { transform: rotate(1.5deg); }
-
-/* No-photo placeholder */
-.no-photo {
-  width: 100%;
-  aspect-ratio: 3/4;
-  background: var(--paper-dark);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  position: relative;
-  overflow: hidden;
-}
-
-.no-photo svg {
-  width: 100%; height: 100%;
-  position: absolute; top: 0; left: 0;
-}
-
-/* Handwritten annotation below photo */
+/* Photo annotation */
 .photo-annotation {
   font-family: var(--f-hand);
   font-size: 0.78rem;
   color: var(--blood-bright);
   text-align: center;
   padding: 0 4px;
-  line-height: 1.3;
+  line-height: 1.35;
+  opacity: 0.85;
 }
 
-/* ── TEXT SIDE ───────────────────────────────────────────────── */
+/* No-photo */
+.no-photo {
+  width: 100%; aspect-ratio: 3/4;
+  background: var(--paper-dark);
+  position: relative; overflow: hidden;
+}
+.no-photo svg { width: 100%; height: 100%; position: absolute; top:0; left:0; }
+
+/* ── TEXT COLUMN ──────────────────────────────────────────── */
 .entry-text-col {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 13px;
 }
 
-/* Case number */
 .entry-case-num {
   font-family: var(--f-type);
-  font-size: 0.55rem;
-  letter-spacing: 0.3em;
+  font-size: 0.53rem;
+  letter-spacing: 0.28em;
   color: var(--ink-very-faded);
 }
 
-/* Name */
 .entry-name {
   font-family: var(--f-type);
-  font-size: 1.5rem;
-  letter-spacing: 0.04em;
+  font-size: 1.45rem;
+  letter-spacing: 0.03em;
   color: var(--ink);
   line-height: 1.1;
+  /* Slight baseline shift to feel hand-typed */
+  position: relative;
+  top: 1px;
 }
 
-/* Nickname */
 .entry-nickname {
   font-family: var(--f-serif-ital);
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--ink-faded);
-  margin-top: -10px;
+  margin-top: -8px;
+  line-height: 1.4;
 }
 
-/* Status badge — typed label, no box */
+/* Status — typed, bordered */
 .entry-status {
   display: inline-block;
   font-family: var(--f-type);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.2em;
   padding: 3px 10px;
   border: 1px solid currentColor;
+  align-self: flex-start;
 }
+.status-executed    { color: var(--blood); border-color: var(--blood); }
+.status-prison      { color: var(--ink-faded); border-color: var(--ink-faded); }
+.status-deceased    { color: var(--ink-very-faded); border-color: var(--ink-very-faded); }
+.status-unidentified{ color: var(--paperclip); border-style: dashed; border-color: var(--paperclip); }
 
-.status-executed  { color: var(--blood); border-color: var(--blood); }
-.status-prison    { color: var(--ink-faded); }
-.status-deceased  { color: var(--ink-faded); }
-.status-unidentified { color: var(--paperclip); border-style: dashed; }
-
-/* Divider rule */
 .entry-rule {
   height: 1px;
-  background: var(--paper-darker);
+  background: linear-gradient(90deg, var(--paper-darker) 60%, transparent 100%);
 }
 
-/* Fact block: typed key + value */
-.entry-facts {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
+/* Facts */
+.entry-facts { display: flex; flex-direction: column; gap: 6px; }
 
-.fact-row {
-  display: flex;
-  gap: 12px;
-  align-items: baseline;
-}
+.fact-row { display: flex; gap: 10px; align-items: baseline; }
 
 .fact-key {
   font-family: var(--f-type);
-  font-size: 0.58rem;
-  letter-spacing: 0.18em;
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
   color: var(--ink-very-faded);
-  min-width: 68px;
+  min-width: 62px;
   flex-shrink: 0;
   padding-top: 1px;
 }
@@ -573,111 +599,152 @@ body {
 .fact-val {
   font-family: var(--f-serif-ital);
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   color: var(--ink-faded);
   line-height: 1.4;
 }
 
+/* Method displayed in blood color, not italic */
 .fact-val.method-val {
   font-style: normal;
   font-family: var(--f-body);
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   color: var(--blood);
+  font-weight: 400;
 }
 
-/* Description / journal entry text */
 .entry-desc {
   font-family: var(--f-body);
-  font-size: 0.9rem;
-  line-height: 1.75;
+  font-size: 0.875rem;
+  line-height: 1.8;
   color: var(--ink-faded);
   border-top: 1px solid var(--paper-darker);
-  padding-top: 14px;
-
+  padding-top: 12px;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Wikipedia link — typewriter styled */
+/* Footer of entry */
 .entry-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 14px;
+  padding-top: 12px;
   border-top: 1px solid var(--paper-darker);
+  gap: 8px;
 }
 
 .wiki-link {
   font-family: var(--f-type);
-  font-size: 0.6rem;
-  letter-spacing: 0.14em;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
   color: var(--ink-faded);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: color 150ms, border-color 150ms;
+  transition: color 140ms, border-color 140ms;
 }
+.wiki-link:hover { color: var(--blood-bright); border-bottom-color: var(--blood-bright); }
 
-.wiki-link:hover {
-  color: var(--blood-bright);
-  border-bottom-color: var(--blood-bright);
-}
-
-/* Handwritten side annotation (random notes) */
+/* Handwritten annotation bottom-right of entry */
 .entry-annotation {
   font-family: var(--f-hand);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--blood);
-  opacity: 0.75;
+  opacity: 0.7;
   transform: rotate(-1.5deg);
   display: inline-block;
+  line-height: 1.2;
 }
 
-/* ── RESPONSIVE ─────────────────────────────────────────────── */
-@media (max-width: 640px) {
-  .entry-spread {
-    grid-template-columns: 1fr;
-  }
-  .entry-photo-col {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-  .photo-tape {
-    width: 120px;
-    flex-shrink: 0;
-  }
-  .masthead { padding: 60px 0 48px; }
-  .ledger-title { font-size: 2.4rem; }
-  .filter-inner, .masthead-inner, .ledger-pages { padding-left: 20px; padding-right: 20px; }
+/* ── BACK TO TOP ──────────────────────────────────────────── */
+.back-to-top {
+  position: fixed;
+  bottom: 36px;
+  right: 36px;
+  z-index: 500;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px) rotate(-2deg);
+  transition: opacity 220ms, transform 220ms;
+  pointer-events: none;
+  /* Tape strip on top corner */
+  position: fixed;
+}
+.back-to-top::before {
+  content: '';
+  position: absolute;
+  top: -7px; left: 8px;
+  width: 32px; height: 10px;
+  background: var(--tape-dark);
+  transform: rotate(-3deg);
+}
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0) rotate(-1deg);
+  pointer-events: auto;
+}
+.back-to-top:hover {
+  background: var(--blood);
+  transform: translateY(-2px) rotate(-2deg);
+}
+.btt-arrow {
+  font-family: var(--f-type);
+  font-size: 1rem;
+  line-height: 1;
+}
+.btt-label {
+  font-family: var(--f-hand);
+  font-size: 0.65rem;
+  line-height: 1;
+  opacity: 0.75;
 }
 
-/* ── FOOTER ─────────────────────────────────────────────────── */
+/* ── FOOTER ───────────────────────────────────────────────── */
 .ledger-footer {
   background: var(--paper);
   border-top: 1px solid var(--paper-darker);
-  padding: 24px 0 40px;
+  padding: 24px 0 44px;
 }
-
 .footer-inner {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 0 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  max-width: 780px; margin: 0 auto; padding: 0 48px;
+  display: flex; justify-content: space-between; align-items: center;
 }
-
 .footer-note {
   font-family: var(--f-serif-ital);
   font-style: italic;
   font-size: 0.85rem;
   color: var(--ink-very-faded);
 }
-
 .footer-source {
   font-family: var(--f-type);
-  font-size: 0.55rem;
-  letter-spacing: 0.15em;
+  font-size: 0.53rem;
+  letter-spacing: 0.13em;
   color: var(--ink-very-faded);
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .margin-scrawl { display: none; }
+  .entry-margin-note { display: none; }
+}
+@media (max-width: 640px) {
+  .masthead { padding: 60px 0 48px; }
+  .ledger-title { font-size: 2.6rem; }
+  .masthead-inner, .filter-inner, .ledger-pages, .footer-inner { padding-left: 20px; padding-right: 20px; }
+  .entry-spread { grid-template-columns: 1fr; }
+  .entry-photo-col { flex-direction: row; align-items: flex-start; }
+  .photo-tape { width: 110px; flex-shrink: 0; }
+  .back-to-top { bottom: 20px; right: 20px; }
 }
