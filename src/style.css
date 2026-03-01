@@ -208,7 +208,7 @@ body {
 }
 
 /* ── STACKING ORDER: all main content above bg layers ───────── */
-body > *:not(.grain-overlay):not(.vignette):not(.bg-mania):not(.blood-layer) {
+body > *:not(.grain-overlay):not(.vignette):not(.bg-mania):not(.blood-layer):not(.back-to-top) {
   position: relative;
   z-index: 10;
 }

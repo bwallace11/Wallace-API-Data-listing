@@ -549,11 +549,12 @@ function updateStats() {
 
 // ── BACK TO TOP ───────────────────────────────────────────────
 function initBackToTop() {
-  const btn=document.getElementById('backToTop');
-  window.addEventListener('scroll',()=>{
-    btn.classList.toggle('visible',window.scrollY>400);
-  },{passive:true});
-  btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    const quarterDown = document.documentElement.scrollHeight * 0.25;
+    btn.classList.toggle('visible', window.scrollY > quarterDown);
+  }, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
 // ── CONTROLS ──────────────────────────────────────────────────
