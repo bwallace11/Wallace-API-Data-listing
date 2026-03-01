@@ -174,7 +174,7 @@ const SKETCHES = [
     <line x1="120" y1="10" x2="118" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
     <line x1="135" y1="10" x2="133" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round" opacity="0.3" transform="rotate(-1,134,26)"/>
     <line x1="90" y1="14" x2="142" y2="30" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-    <text x="165" y="30" font-family="DK Face Your Fears,cursive" font-size="11" fill="#4A1515" opacity="0.3" transform="rotate(-1,165,30)">how many more</text>
+    <text x="165" y="30" font-family="HelpMe,cursive" font-size="11" fill="#4A1515" opacity="0.3" transform="rotate(-1,165,30)">how many more</text>
   </svg>`,
 
   // Eyeball sketch
@@ -192,14 +192,14 @@ const SKETCHES = [
       <line x1="35" y1="-16" x2="38" y2="-26" stroke="#1C1410" stroke-width="0.8" stroke-linecap="round"/>
       <line x1="55" y1="-8" x2="60" y2="-16" stroke="#1C1410" stroke-width="0.8" stroke-linecap="round"/>
     </g>
-    <text x="10" y="45" font-family="DK Face Your Fears,cursive" font-size="10" fill="#4A1515" opacity="0.25" transform="rotate(-1.5,10,45)">always watching</text>
+    <text x="10" y="45" font-family="HelpMe,cursive" font-size="10" fill="#4A1515" opacity="0.25" transform="rotate(-1.5,10,45)">always watching</text>
   </svg>`,
 
   // Spiral + scrawl
   `<svg class="inline-sketch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60" height="60">
     <path d="M40,30 Q42,20 50,20 Q62,20 62,30 Q62,44 46,44 Q28,44 28,26 Q28,8 52,8 Q72,8 72,30" stroke="#1C1410" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.2"/>
-    <text x="88" y="22" font-family="DK Face Your Fears,cursive" font-size="13" fill="#4A1515" opacity="0.25" font-weight="600" transform="rotate(-1,88,22)">WHY WHY WHY WHY WHY WHY</text>
-    <text x="88" y="42" font-family="DK Face Your Fears,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,88,42)">i keep coming back to this</text>
+    <text x="88" y="22" font-family="HelpMe,cursive" font-size="13" fill="#4A1515" opacity="0.25" font-weight="600" transform="rotate(-1,88,22)">WHY WHY WHY WHY WHY WHY</text>
+    <text x="88" y="42" font-family="HelpMe,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,88,42)">i keep coming back to this</text>
   </svg>`,
 
   // Cross / X marks
@@ -212,7 +212,7 @@ const SKETCHES = [
       <line x1="95" y1="12" x2="115" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="115" y1="12" x2="95" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round"/>
     </g>
-    <text x="140" y="32" font-family="DK Face Your Fears,cursive" font-size="12" fill="#1C1410" opacity="0.2" transform="rotate(-0.8,140,32)">these are the ones I know about</text>
+    <text x="140" y="32" font-family="HelpMe,cursive" font-size="12" fill="#1C1410" opacity="0.2" transform="rotate(-0.8,140,32)">these are the ones I know about</text>
   </svg>`,
 
   // Scrawled face — oval, eyes, frown
@@ -231,9 +231,9 @@ const SKETCHES = [
       <path d="M0,-32 Q5,-42 12,-30" stroke="#1C1410" stroke-width="1" fill="none"/>
       <path d="M14,-26 Q22,-34 20,-18" stroke="#1C1410" stroke-width="1" fill="none"/>
     </g>
-    <text x="90" y="28" font-family="DK Face Your Fears,cursive" font-size="11" fill="#4A1515" opacity="0.22" transform="rotate(-1.5,90,28)">i know this face</text>
-    <text x="90" y="48" font-family="DK Face Your Fears,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,90,48)">they always look the same</text>
-    <text x="90" y="66" font-family="DK Face Your Fears,cursive" font-size="9" fill="#4A1515" opacity="0.15" transform="rotate(-0.8,90,66)">the eyes. always the eyes.</text>
+    <text x="90" y="28" font-family="HelpMe,cursive" font-size="11" fill="#4A1515" opacity="0.22" transform="rotate(-1.5,90,28)">i know this face</text>
+    <text x="90" y="48" font-family="HelpMe,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,90,48)">they always look the same</text>
+    <text x="90" y="66" font-family="HelpMe,cursive" font-size="9" fill="#4A1515" opacity="0.15" transform="rotate(-0.8,90,66)">the eyes. always the eyes.</text>
   </svg>`,
 
   // Dagger / knife sketch
@@ -244,16 +244,16 @@ const SKETCHES = [
       <line x1="-6" y1="20" x2="6" y2="20" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="-5" y1="23" x2="5" y2="23" stroke="#4A1515" stroke-width="1" stroke-linecap="round"/>
     </g>
-    <text x="75" y="22" font-family="DK Face Your Fears,cursive" font-size="13" fill="#4A1515" opacity="0.22" font-weight="700" transform="rotate(-0.5,75,22)">AGAIN</text>
-    <text x="75" y="40" font-family="DK Face Your Fears,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(1,75,40)">and again</text>
-    <text x="75" y="54" font-family="DK Face Your Fears,cursive" font-size="9" fill="#1C1410" opacity="0.14" transform="rotate(-0.5,75,54)">and again</text>
+    <text x="75" y="22" font-family="HelpMe,cursive" font-size="13" fill="#4A1515" opacity="0.22" font-weight="700" transform="rotate(-0.5,75,22)">AGAIN</text>
+    <text x="75" y="40" font-family="HelpMe,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(1,75,40)">and again</text>
+    <text x="75" y="54" font-family="HelpMe,cursive" font-size="9" fill="#1C1410" opacity="0.14" transform="rotate(-0.5,75,54)">and again</text>
   </svg>`,
 
   // Zigzag / frantic lines + text
   `<svg class="inline-sketch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 45" height="45">
     <polyline points="10,22 25,8 40,36 55,8 70,36 85,8 100,36 115,22" stroke="#1C1410" stroke-width="1.2" fill="none" opacity="0.18" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="130" y="20" font-family="DK Face Your Fears,cursive" font-size="11" fill="#4A1515" opacity="0.25" transform="rotate(-2,130,20)">the pattern never stops</text>
-    <text x="130" y="38" font-family="DK Face Your Fears,cursive" font-size="9" fill="#1C1410" opacity="0.18">i can see it now</text>
+    <text x="130" y="20" font-family="HelpMe,cursive" font-size="11" fill="#4A1515" opacity="0.25" transform="rotate(-2,130,20)">the pattern never stops</text>
+    <text x="130" y="38" font-family="HelpMe,cursive" font-size="9" fill="#1C1410" opacity="0.18">i can see it now</text>
   </svg>`,
 
   // Map-pin / location dots + names
@@ -272,7 +272,7 @@ const SKETCHES = [
       <line x1="35" y1="30" x2="85" y2="28" stroke="#1C1410" stroke-width="0.8" stroke-dasharray="3,3"/>
       <line x1="95" y1="28" x2="145" y2="30" stroke="#1C1410" stroke-width="0.8" stroke-dasharray="3,3"/>
     </g>
-    <text x="175" y="28" font-family="DK Face Your Fears,cursive" font-size="11" fill="#1C1410" opacity="0.2" transform="rotate(-1)">connected. all connected.</text>
+    <text x="175" y="28" font-family="HelpMe,cursive" font-size="11" fill="#1C1410" opacity="0.2" transform="rotate(-1)">connected. all connected.</text>
   </svg>`,
 ];
 

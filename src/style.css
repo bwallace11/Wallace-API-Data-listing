@@ -195,13 +195,13 @@ body {
 }
 
 .bg-scratch {
-  font-family: 'BlackDahlia', cursive;
+  font-family: var(--f-bg-words);
   font-size: 13px;
   fill: rgba(4, 2, 1, 0.22);
 }
 
 .bg-scratch-lg {
-  font-family: 'BlackDahlia', cursive;
+  font-family: var(--f-bg-words);
   font-size: 22px;
   fill: rgba(4, 2, 1, 0.18);
   letter-spacing: 0.05em;
@@ -638,6 +638,10 @@ body > *:not(.grain-overlay):not(.vignette):not(.bg-mania):not(.blood-layer):not
   width: 100%;
   pointer-events: none;
   user-select: none;
+}
+
+.inline-sketch text {
+  font-family: var(--f-bg-words);
 }
 
 /* ── BACK TO TOP ───────────────────────────────────────────── */
