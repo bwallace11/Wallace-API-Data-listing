@@ -4,8 +4,8 @@
 
 /* ── LOCAL FONTS ───────────────────────────────────────────── */
 @font-face {
-  font-family: 'BlackDahlia';
-  src: url('./fonts/BlackDahlia.ttf') format('truetype');
+  font-family: 'HelpMe';
+  src: url('./fonts/HelpMe.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -127,10 +127,10 @@
   /* SLOT 2: BODY FONT — descriptions, facts, body text         */
   --f-body:        'Rubik', Georgia, serif;
   /* SLOT 3: BG WORDS FONT — the manic background text layer    */
-  --f-bg-words:    'BlackDahlia', cursive;
+  --f-bg-words:    'HelpMe', cursive;
   /* Internal supporting fonts (italic dates, handwritten notes)*/
   --f-serif-ital:  'Rubik', Georgia, serif;
-  --f-hand:        'BlackDahlia', cursive;
+  --f-hand:        'HelpMe', cursive;
 }
 
 /* ── RESET ─────────────────────────────────────────────────── */
