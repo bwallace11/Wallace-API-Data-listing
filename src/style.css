@@ -23,12 +23,12 @@
   /* SLOT 1: HEADER FONT — title, entry names, case numbers     */
   --f-type:        'Special Elite', 'Courier New', monospace;
   /* SLOT 2: BODY FONT — descriptions, facts, body text         */
-  --f-body:        'rubik', Georgia, serif;
+  --f-body:        'Rubik', Georgia, serif;
   /* SLOT 3: BG WORDS FONT — the manic background text layer    */
   --f-bg-words:    'DK Face Your Fears', cursive;
   /* Internal supporting fonts (italic dates, handwritten notes) */
-  --f-serif-ital:  'Cormorant Garamond', Georgia, serif;
-  --f-hand:        'Caveat', cursive;
+  --f-serif-ital:  'Rubik', Georgia, serif;
+  --f-hand:        'DK Face Your Fears', cursive;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -562,4 +562,52 @@ body > *:not(.grain-overlay):not(.vignette):not(.bg-mania):not(.blood-layer) {
   .entry-photo-col { flex-direction: row; align-items: flex-start; }
   .photo-tape { width: 110px; flex-shrink: 0; }
   .back-to-top { bottom: 20px; right: 20px; }
+}
+
+
+/* ===== DK FACE YOUR FEARS (Header) ===== */
+@font-face {
+  font-family: 'FaceYourFears';
+  src: url('/assets/fonts/DK Face Your Fears.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ===== SPECIAL ELITE (Journal Typewriter) ===== */
+@font-face {
+  font-family: 'SpecialElite';
+  src: url('/assets/fonts/SpecialElite.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ===== RUBIK FAMILY (Clean UI Text) ===== */
+@font-face {
+  font-family: 'Rubik';
+  src: url('/assets/fonts/Rubik-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/assets/fonts/Rubik-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/assets/fonts/Rubik-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/assets/fonts/Rubik-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/assets/fonts/Rubik-Black.ttf') format('truetype');
+  font-weight: 900;
 }
