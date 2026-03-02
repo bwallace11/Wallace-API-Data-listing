@@ -1,205 +1,227 @@
 console.log('📖 The Keepsake Ledger — UNHINGED EDITION');
 
-/* ──────────────────────────────────────────────────────────────
-   WIKIPEDIA TITLE CORRECTIONS
-────────────────────────────────────────────────────────────── */
-const WIKI_TITLES = {
-  "Otis Toole": "Ottis Toole",
-  "Graham Frederick Young": "Graham Young",
-  "Theodore John KACZYNSKI": "Ted Kaczynski",
-  "John Joseph JOUBERT IV": "John Joubert (serial killer)",
-  "Johann UNTERWEGER": "Jack Unterweger",
-  "Yavuz YAPICIOĞLU": "Yavuz Yapıcıoğlu",
-  "José Antonio RODRÍGUEZ VEGA": "José Antonio Rodríguez Vega",
-  "James Spyridon VLASSAKIS": "Snowtown murders",
-  "Robert Joe Wagner": "Snowtown murders",
-  "Bruce McArthur": "2010–2017 Toronto serial homicides"
-};
+// ── STATIC RECORDS ────────────────────────────────────────────
+const STATIC = {};
 
-/* ──────────────────────────────────────────────────────────────
-   STATIC OVERRIDES (kept from your original)
-────────────────────────────────────────────────────────────── */
-const STATIC = {
-  "Dennis Nilsen": {
-    name:"Dennis Nilsen",
-    nickname:"The Muswell Hill Murderer",
-    years_active:"1978–1983",
-    country:"United Kingdom",
-    method:"Strangulation, drowning",
-    description:"Scottish serial killer who murdered at least fifteen young men in London, keeping their bodies in his home before disposal. Arrested in 1983 after human remains blocked a drain.",
-    wikipedia_url:"https://en.wikipedia.org/wiki/Dennis_Nilsen",
-    image:"https://upload.wikimedia.org/wikipedia/en/5/5b/Dennis_Nilsen_police_photo.jpg",
-    status:"DECEASED",
-    death_date:"2018"
-  },
-  "Peter Kürten": {
-    name:"Peter Kürten",
-    nickname:"The Vampire of Düsseldorf",
-    years_active:"1913–1930",
-    country:"Germany",
-    method:"Stabbing, strangulation",
-    description:"German serial killer active primarily in Düsseldorf. Arrested in 1930 and guillotined in 1931.",
-    wikipedia_url:"https://en.wikipedia.org/wiki/Peter_K%C3%BCrten",
-    image:"https://upload.wikimedia.org/wikipedia/commons/4/45/Peter_K%C3%BCrten.jpg",
-    status:"EXECUTED",
-    death_date:"1931"
-  }
-};
-
-/* ──────────────────────────────────────────────────────────────
-   VERIFIED STATUS
-────────────────────────────────────────────────────────────── */
 const KNOWN_STATUS = {
-  "Ted Bundy":{status:"EXECUTED",death_date:"1989"},
-  "Jeffrey Dahmer":{status:"DECEASED",death_date:"1994"},
-  "John Wayne Gacy":{status:"EXECUTED",death_date:"1994"},
-  "Gary Ridgway":{status:"IN PRISON"},
-  "Andrei Chikatilo":{status:"EXECUTED",death_date:"1994"},
-  "Harold Shipman":{status:"DECEASED",death_date:"2004"},
-  "Aileen Wuornos":{status:"EXECUTED",death_date:"2002"},
-  "Richard Ramirez":{status:"DECEASED",death_date:"2013"},
-  "Edmund Kemper":{status:"IN PRISON"},
-  "Dennis Rader":{status:"IN PRISON"},
-  "Albert Fish":{status:"EXECUTED",death_date:"1936"},
-  "David Berkowitz":{status:"IN PRISON"},
-  "Samuel Little":{status:"DECEASED",death_date:"2020"},
-  "Rodney Alcala":{status:"DECEASED",death_date:"2021"},
-  "H.H. Holmes":{status:"EXECUTED",death_date:"1896"},
-  "Robert Pickton":{status:"IN PRISON"},
-  "Dean Corll":{status:"DECEASED",death_date:"1973"},
-  "Ed Gein":{status:"DECEASED",death_date:"1984"},
+  "Ted Bundy":           {status:"EXECUTED",  death_date:"1989"},
+  "Jeffrey Dahmer":      {status:"DECEASED",  death_date:"1994"},
+  "John Wayne Gacy":     {status:"EXECUTED",  death_date:"1994"},
+  "Gary Ridgway":        {status:"IN PRISON"},
+  "Andrei Chikatilo":    {status:"EXECUTED",  death_date:"1994"},
+  "Harold Shipman":      {status:"DECEASED",  death_date:"2004"},
+  "Aileen Wuornos":      {status:"EXECUTED",  death_date:"2002"},
+  "Richard Ramirez":     {status:"DECEASED",  death_date:"2013"},
+  "Edmund Kemper":       {status:"IN PRISON"},
+  "Dennis Rader":        {status:"IN PRISON"},
+  "Albert Fish":         {status:"EXECUTED",  death_date:"1936"},
+  "David Berkowitz":     {status:"IN PRISON"},
+  "Samuel Little":       {status:"DECEASED",  death_date:"2020"},
+  "Rodney Alcala":       {status:"DECEASED",  death_date:"2021"},
+  "H.H. Holmes":         {status:"EXECUTED",  death_date:"1896"},
+  "Robert Pickton":      {status:"IN PRISON"},
+  "Dean Corll":          {status:"DECEASED",  death_date:"1973"},
+  "Ed Gein":             {status:"DECEASED",  death_date:"1984"},
   "Alexander Pichushkin":{status:"IN PRISON"},
-  "Paul Bernardo":{status:"IN PRISON"},
-  "Joachim Kroll":{status:"DECEASED",death_date:"1991"},
-  "Peter Sutcliffe":{status:"DECEASED",death_date:"2020"},
-  "Ian Brady":{status:"DECEASED",death_date:"2017"},
-  "Anatoly Onoprienko":{status:"DECEASED",death_date:"2013"},
-  "Gary Heidnik":{status:"EXECUTED",death_date:"1999"},
-  "Fred West":{status:"DECEASED",death_date:"1995"},
-  "Arthur Shawcross":{status:"DECEASED",death_date:"2008"},
-  "Wayne Williams":{status:"IN PRISON"},
-  "Richard Cottingham":{status:"IN PRISON"},
-  "Randy Kraft":{status:"IN PRISON"},
-  "Robert Hansen":{status:"DECEASED",death_date:"2014"},
-  "Joseph DeAngelo":{status:"IN PRISON"},
-  "Charles Cullen":{status:"IN PRISON"},
-  "Marc Dutroux":{status:"IN PRISON"},
-  "Bruce McArthur":{status:"IN PRISON"},
-  "William Bonin":{status:"EXECUTED",death_date:"1996"},
-  "Donald Gaskins":{status:"EXECUTED",death_date:"1991"},
-  "David Parker Ray":{status:"DECEASED",death_date:"2002"},
-  "Tsutomu Miyazaki":{status:"EXECUTED",death_date:"2008"},
-  "Mikhail Popkov":{status:"IN PRISON"},
-  "Jack the Ripper":{status:"UNIDENTIFIED"},
-  "Zodiac Killer":{status:"UNIDENTIFIED"},
-  "Dennis Nilsen":{status:"DECEASED",death_date:"2018"},
-  "Peter Kürten":{status:"EXECUTED",death_date:"1931"},
-
-  /* NEW */
-  "Robert Lee Yates":{status:"IN PRISON"},
-  "Otis Toole":{status:"DECEASED",death_date:"1996"},
-  "Graham Frederick Young":{status:"DECEASED",death_date:"1990"},
-  "Yavuz YAPICIOĞLU":{status:"IN PRISON"},
-  "Robert Joe Wagner":{status:"IN PRISON"},
-  "James Spyridon VLASSAKIS":{status:"IN PRISON"},
-  "José Antonio RODRÍGUEZ VEGA":{status:"DECEASED",death_date:"2002"},
-  "Darren Deon Vann":{status:"IN PRISON"},
-  "Andrew URDIALES":{status:"DECEASED",death_date:"2018"},
-  "Johann UNTERWEGER":{status:"DECEASED",death_date:"1994"},
-  "Colin Ireland":{status:"DECEASED",death_date:"2012"},
-  "Keith Hunter Jesperson":{status:"IN PRISON"},
-  "John Joseph JOUBERT IV":{status:"EXECUTED",death_date:"1996"},
-  "Theodore John KACZYNSKI":{status:"DECEASED",death_date:"2023"},
-  "Ali Kaya":{status:"IN PRISON"},
-  "Patrick Wayne Kearney":{status:"IN PRISON"},
-  "Larry William Eyler":{status:"DECEASED",death_date:"1994"},
-  "Walter Earl Ellis":{status:"DECEASED",death_date:"2013"},
-  "Donald Leroy Evans":{status:"DECEASED",death_date:"1999"},
-  "Robert Maudsley":{status:"IN PRISON"}
+  "Paul Bernardo":       {status:"IN PRISON"},
+  "Joachim Kroll":       {status:"DECEASED",  death_date:"1991"},
+  "Robert Maudsley":     {status:"IN PRISON"},
+  "Peter Sutcliffe":     {status:"DECEASED",  death_date:"2020"},
+  "Ian Brady":           {status:"DECEASED",  death_date:"2017"},
+  "Anatoly Onoprienko":  {status:"DECEASED",  death_date:"2013"},
+  "Gary Heidnik":        {status:"EXECUTED",  death_date:"1999"},
+  "Fred West":           {status:"DECEASED",  death_date:"1995"},
+  "Arthur Shawcross":    {status:"DECEASED",  death_date:"2008"},
+  "Wayne Williams":      {status:"IN PRISON"},
+  "Richard Cottingham":  {status:"IN PRISON"},
+  "Randy Kraft":         {status:"IN PRISON"},
+  "Robert Hansen":       {status:"DECEASED",  death_date:"2014"},
+  "Joseph DeAngelo":     {status:"IN PRISON"},
+  "Charles Cullen":      {status:"IN PRISON"},
+  "Marc Dutroux":        {status:"IN PRISON"},
+  "Bruce McArthur":      {status:"IN PRISON"},
+  "William Bonin":       {status:"EXECUTED",  death_date:"1996"},
+  "Donald Gaskins":      {status:"EXECUTED",  death_date:"1991"},
+  "David Parker Ray":    {status:"DECEASED",  death_date:"2002"},
+  "Tsutomu Miyazaki":    {status:"EXECUTED",  death_date:"2008"},
+  "Mikhail Popkov":      {status:"IN PRISON"},
+  "Jack the Ripper":     {status:"UNIDENTIFIED"},
+  "Zodiac Killer":       {status:"UNIDENTIFIED"},
+  "Dennis Nilsen":       {status:"DECEASED",  death_date:"2018"},
+  "Peter Kürten":        {status:"EXECUTED",  death_date:"1931"},
+  "Robert Lee Yates":    {status:"IN PRISON"},
+  "Otis Toole":          {status:"DECEASED",  death_date:"1996"},
+  "Graham Young":        {status:"DECEASED",  death_date:"1990"},
+  "Yavuz Yapıcıoğlu":    {status:"IN PRISON"},
+  "Robert Joe Wagner":   {status:"IN PRISON"},
+  "James Vlassakis":     {status:"IN PRISON"},
+  "José Rodríguez Vega": {status:"DECEASED",  death_date:"2002"},
+  "Darren Deon Vann":    {status:"IN PRISON"},
+  "Andrew Urdiales":     {status:"EXECUTED",  death_date:"2018"},
+  "Johann Unterweger":   {status:"DECEASED",  death_date:"1994"},
+  "Colin Ireland":       {status:"DECEASED",  death_date:"2012"},
+  "Keith Jesperson":     {status:"IN PRISON"},
+  "John Joubert":        {status:"EXECUTED",  death_date:"1996"},
+  "Ted Kaczynski":       {status:"DECEASED",  death_date:"2023"},
+  "Ali Kaya":            {status:"IN PRISON"},
+  "Patrick Kearney":     {status:"IN PRISON"},
+  "Larry Eyler":         {status:"DECEASED",  death_date:"1994"},
+  "Walter Earl Ellis":   {status:"DECEASED",  death_date:"2013"},
+  "Donald Leroy Evans":  {status:"DECEASED",  death_date:"1999"},
 };
 
-/* ──────────────────────────────────────────────────────────────
-   EXPANDED COUNTRY PARSER
-────────────────────────────────────────────────────────────── */
-function extractCountry(text){
-  if(!text) return null;
-  const map=[
-    ['American','United States'],['British','United Kingdom'],
-    ['Canadian','Canada'],['German','Germany'],
-    ['Russian','Russia'],['Australian','Australia'],
-    ['French','France'],['Italian','Italy'],
-    ['Scottish','United Kingdom'],['English','United Kingdom'],
-    ['Welsh','United Kingdom'],['Irish','Ireland'],
-    ['Spanish','Spain'],['Turkish','Turkey'],
-    ['Austrian','Austria'],['Swedish','Sweden'],
-    ['Norwegian','Norway'],['Danish','Denmark'],
-    ['Finnish','Finland'],['Greek','Greece'],
-    ['Ukrainian','Ukraine'],['Colombian','Colombia'],
-    ['Belgian','Belgium'],['Japanese','Japan'],
-    ['South African','South Africa'],['Polish','Poland'],
-    ['Dutch','Netherlands']
-  ];
-  for(const [adj,country] of map){
-    if(text.includes(adj)) return country;
-  }
-  return null;
-}
+const KNOWN_METHODS = {
+  "Ted Bundy":           "Strangulation, bludgeoning",
+  "Jeffrey Dahmer":      "Strangulation, drugging",
+  "John Wayne Gacy":     "Strangulation, asphyxiation",
+  "Gary Ridgway":        "Strangulation",
+  "Andrei Chikatilo":    "Stabbing, mutilation",
+  "Harold Shipman":      "Lethal injection (diamorphine)",
+  "Aileen Wuornos":      "Shooting",
+  "Richard Ramirez":     "Shooting, stabbing, strangulation",
+  "Edmund Kemper":       "Shooting, stabbing, strangulation",
+  "Dennis Rader":        "Strangulation, asphyxiation",
+  "Albert Fish":         "Strangulation, stabbing",
+  "David Berkowitz":     "Shooting",
+  "H.H. Holmes":         "Various, including gassing",
+  "Dean Corll":          "Shooting, strangulation",
+  "Ed Gein":             "Shooting",
+  "Alexander Pichushkin":"Bludgeoning",
+  "Peter Sutcliffe":     "Bludgeoning, stabbing",
+  "Ian Brady":           "Strangulation, shooting",
+  "Gary Heidnik":        "Strangulation, electrocution",
+  "Fred West":           "Strangulation, mutilation",
+  "Arthur Shawcross":    "Strangulation",
+  "Wayne Williams":      "Strangulation, asphyxiation",
+  "Richard Cottingham":  "Strangulation, stabbing",
+  "William Bonin":       "Strangulation",
+  "Donald Gaskins":      "Various methods",
+  "Tsutomu Miyazaki":    "Strangulation",
+  "Mikhail Popkov":      "Stabbing, axe",
+  "Samuel Little":       "Strangulation",
+  "Rodney Alcala":       "Strangulation",
+  "Robert Pickton":      "Shooting, dismemberment",
+  "Paul Bernardo":       "Strangulation, asphyxiation",
+  "Anatoly Onoprienko":  "Shooting",
+  "Randy Kraft":         "Strangulation, drugging",
+  "Robert Hansen":       "Shooting, stabbing",
+  "Joseph DeAngelo":     "Shooting, strangulation",
+  "Charles Cullen":      "Lethal injection (digoxin)",
+  "Marc Dutroux":        "Starvation, torture",
+  "Bruce McArthur":      "Ligature strangulation",
+  "David Parker Ray":    "Torture, strangulation",
+  "Jack the Ripper":     "Throat slashing, mutilation",
+  "Zodiac Killer":       "Shooting, stabbing",
+  "Dennis Nilsen":       "Strangulation, drowning",
+  "Peter Kürten":        "Stabbing, strangulation",
+  "Joachim Kroll":       "Strangulation, mutilation",
+  "Robert Maudsley":     "Strangulation, stabbing, garrote",
+  "Robert Lee Yates":    "Shooting",
+  "Otis Toole":          "Stabbing, strangulation, arson",
+  "Graham Young":        "Poisoning (thallium, antimony)",
+  "Yavuz Yapıcıoğlu":   "Stabbing",
+  "Robert Joe Wagner":   "Strangulation, torture",
+  "James Vlassakis":     "Strangulation",
+  "José Rodríguez Vega": "Strangulation",
+  "Darren Deon Vann":    "Strangulation",
+  "Andrew Urdiales":     "Shooting, stabbing",
+  "Johann Unterweger":   "Strangulation",
+  "Colin Ireland":       "Strangulation, asphyxiation",
+  "Keith Jesperson":     "Strangulation",
+  "John Joubert":        "Stabbing, strangulation",
+  "Ted Kaczynski":       "Mail bombing",
+  "Ali Kaya":            "Stabbing",
+  "Patrick Kearney":     "Shooting",
+  "Larry Eyler":         "Stabbing, strangulation",
+  "Walter Earl Ellis":   "Strangulation",
+  "Donald Leroy Evans":  "Strangulation",
+};
 
-/* ──────────────────────────────────────────────────────────────
-   FETCH (merged + corrected)
-────────────────────────────────────────────────────────────── */
-async function fetchKiller(name){
-  if(STATIC[name]){
-    const st=KNOWN_STATUS[name]||{};
-    return {...STATIC[name],status:st.status||STATIC[name].status,death_date:st.death_date||STATIC[name].death_date};
-  }
+const KNOWN_NICKNAMES = {
+  "Ted Bundy":           "The Lady Killer",
+  "Jeffrey Dahmer":      "The Milwaukee Cannibal",
+  "John Wayne Gacy":     "The Killer Clown",
+  "Gary Ridgway":        "The Green River Killer",
+  "Andrei Chikatilo":    "The Butcher of Rostov",
+  "Harold Shipman":      "Doctor Death",
+  "Aileen Wuornos":      "Damsel of Death",
+  "Richard Ramirez":     "The Night Stalker",
+  "Edmund Kemper":       "The Co-ed Killer",
+  "Dennis Rader":        "BTK Killer",
+  "Albert Fish":         "The Gray Man",
+  "David Berkowitz":     "Son of Sam",
+  "Samuel Little":       "The Traveling Man",
+  "Rodney Alcala":       "The Dating Game Killer",
+  "H.H. Holmes":         "America's First Serial Killer",
+  "Robert Pickton":      "The Pig Farmer Killer",
+  "Dean Corll":          "The Candy Man",
+  "Alexander Pichushkin":"The Chessboard Killer",
+  "Peter Sutcliffe":     "The Yorkshire Ripper",
+  "Ian Brady":           "The Moors Murderer",
+  "Fred West":           "The Gloucester Murderer",
+  "Donald Gaskins":      "Pee Wee",
+  "Jack the Ripper":     "Saucy Jacky",
+  "Zodiac Killer":       "The Zodiac",
+  "Ed Gein":             "The Butcher of Plainfield",
+  "Paul Bernardo":       "The Scarborough Rapist",
+  "Anatoly Onoprienko":  "Citizen O",
+  "Gary Heidnik":        "The House of Horrors Killer",
+  "Arthur Shawcross":    "The Genesee River Killer",
+  "Wayne Williams":      "The Atlanta Child Killer",
+  "Richard Cottingham":  "The Torso Killer",
+  "Randy Kraft":         "The Scorecard Killer",
+  "Robert Hansen":       "The Butcher Baker",
+  "Joseph DeAngelo":     "The Golden State Killer",
+  "Charles Cullen":      "The Angel of Death",
+  "Marc Dutroux":        "The Beast of Belgium",
+  "Bruce McArthur":      "The Village Killer",
+  "William Bonin":       "The Freeway Killer",
+  "David Parker Ray":    "The Toy Box Killer",
+  "Tsutomu Miyazaki":    "The Little Girl Killer",
+  "Mikhail Popkov":      "The Werewolf",
+  "Robert Joe Wagner":   null,
+  "James Vlassakis":     null,
+  "Darren Deon Vann":    "The Gary Strangler",
+  "Andrew Urdiales":     null,
+  "John Joubert":        "The Woodford Slasher",
+  "Dennis Nilsen":       "The Muswell Hill Murderer",
+  "Peter Kürten":        "The Vampire of Düsseldorf",
+  "Joachim Kroll":       "The Ruhr Cannibal",
+  "Robert Maudsley":     "Hannibal the Cannibal",
+  "Robert Lee Yates":    "The Spokane Serial Killer",
+  "Otis Toole":          "The Jacksonville Cannibal",
+  "Graham Young":        "The Teacup Poisoner",
+  "Yavuz Yapıcıoğlu":   "The Screwdriver Killer",
+  "José Rodríguez Vega": "El Mataviejas",
+  "Johann Unterweger":   "Jack Unterweger",
+  "Colin Ireland":       "The Gay Slayer",
+  "Keith Jesperson":     "The Happy Face Killer",
+  "Ted Kaczynski":       "The Unabomber",
+  "Ali Kaya":            "The Babyface Killer",
+  "Patrick Kearney":     "The Trash Bag Killer",
+  "Larry Eyler":         "The Interstate Killer",
+  "Walter Earl Ellis":   "The Milwaukee North Side Strangler",
+  "Donald Leroy Evans":  "The Rest Area Killer",
+};
 
-  const title=WIKI_TITLES[name]||name;
-  const res=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
-  const d=await res.json();
-  if(!d.extract||d.type==='disambiguation'||d.extract.length<80) return null;
-
-  const st=KNOWN_STATUS[name]||KNOWN_STATUS[title]||{};
-
-  return{
-    name,
-    nickname:null,
-    years_active:null,
-    country:extractCountry(d.extract),
-    method:null,
-    description:d.extract,
-    wikipedia_url:d.content_urls?.desktop?.page||null,
-    image:d.thumbnail?.source||null,
-    status:st.status||'UNKNOWN',
-    death_date:st.death_date||null
-  };
-}
-
-/* ──────────────────────────────────────────────────────────────
-   MASTER KILLER LIST
-────────────────────────────────────────────────────────────── */
-const KILLERS=[
-
-"Ted Bundy","Jeffrey Dahmer","John Wayne Gacy","Gary Ridgway",
-"Andrei Chikatilo","Harold Shipman","Aileen Wuornos","Richard Ramirez",
-"Edmund Kemper","Dennis Rader","Albert Fish","David Berkowitz",
-"Samuel Little","Rodney Alcala","H.H. Holmes","Robert Pickton",
-"Dean Corll","Ed Gein","Alexander Pichushkin","Paul Bernardo",
-"Joachim Kroll","Peter Sutcliffe","Ian Brady","Anatoly Onoprienko",
-"Gary Heidnik","Fred West","Arthur Shawcross","Wayne Williams",
-"Richard Cottingham","Randy Kraft","Robert Hansen","Joseph DeAngelo",
-"Charles Cullen","Marc Dutroux","Bruce McArthur","William Bonin",
-"Donald Gaskins","David Parker Ray","Tsutomu Miyazaki","Mikhail Popkov",
-"Jack the Ripper","Zodiac Killer","Dennis Nilsen","Peter Kürten",
-
-"Robert Lee Yates","Otis Toole","Graham Frederick Young",
-"Yavuz YAPICIOĞLU","Robert Joe Wagner","James Spyridon VLASSAKIS",
-"José Antonio RODRÍGUEZ VEGA","Darren Deon Vann","Andrew URDIALES",
-"Johann UNTERWEGER","Colin Ireland","Keith Hunter Jesperson",
-"John Joseph JOUBERT IV","Theodore John KACZYNSKI","Ali Kaya",
-"Patrick Wayne Kearney","Larry William Eyler","Walter Earl Ellis",
-"Donald Leroy Evans","Robert Maudsley"
-
+const KILLERS = [
+  "Ted Bundy","Jeffrey Dahmer","John Wayne Gacy","Gary Ridgway",
+  "Andrei Chikatilo","Harold Shipman","Aileen Wuornos","Richard Ramirez",
+  "Edmund Kemper","Dennis Rader","Albert Fish","David Berkowitz",
+  "Samuel Little","Rodney Alcala","H.H. Holmes","Robert Pickton",
+  "Dean Corll","Ed Gein","Alexander Pichushkin","Paul Bernardo",
+  "Joachim Kroll","Peter Sutcliffe","Ian Brady","Anatoly Onoprienko",
+  "Gary Heidnik","Fred West","Arthur Shawcross","Wayne Williams",
+  "Richard Cottingham","Randy Kraft","Robert Hansen","Joseph DeAngelo",
+  "Charles Cullen","Marc Dutroux","Bruce McArthur","William Bonin",
+  "Donald Gaskins","David Parker Ray","Tsutomu Miyazaki","Mikhail Popkov",
+  "Jack the Ripper","Zodiac Killer","Dennis Nilsen","Peter Kürten",
+  "Robert Maudsley",
+  "Robert Lee Yates","Otis Toole","Graham Young","Yavuz Yapıcıoğlu",
+  "Robert Joe Wagner","James Vlassakis","José Rodríguez Vega","Darren Deon Vann",
+  "Andrew Urdiales","Johann Unterweger","Colin Ireland","Keith Jesperson",
+  "John Joubert","Ted Kaczynski","Ali Kaya","Patrick Kearney",
+  "Larry Eyler","Walter Earl Ellis","Donald Leroy Evans",
 ];
 
 const ROTATIONS = ['rotate-n1','rotate-p1','rotate-n2','rotate-p2','rotate-p3','rotate-p1'];
@@ -232,7 +254,7 @@ const SKETCHES = [
     <line x1="120" y1="10" x2="118" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
     <line x1="135" y1="10" x2="133" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round" opacity="0.3" transform="rotate(-1,134,26)"/>
     <line x1="90" y1="14" x2="142" y2="30" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-    <text x="165" y="30" font-family="HelpMe,cursive" font-size="11" fill="#4A1515" opacity="0.3" transform="rotate(-1,165,30)">how many more</text>
+    <text x="165" y="30" font-family="DK Face Your Fears,cursive" font-size="11" fill="#4A1515" opacity="0.3" transform="rotate(-1,165,30)">how many more</text>
   </svg>`,
 
   // Eyeball sketch
@@ -250,14 +272,14 @@ const SKETCHES = [
       <line x1="35" y1="-16" x2="38" y2="-26" stroke="#1C1410" stroke-width="0.8" stroke-linecap="round"/>
       <line x1="55" y1="-8" x2="60" y2="-16" stroke="#1C1410" stroke-width="0.8" stroke-linecap="round"/>
     </g>
-    <text x="10" y="45" font-family="HelpMe,cursive" font-size="10" fill="#4A1515" opacity="0.25" transform="rotate(-1.5,10,45)">always watching</text>
+    <text x="10" y="45" font-family="DK Face Your Fears,cursive" font-size="10" fill="#4A1515" opacity="0.25" transform="rotate(-1.5,10,45)">always watching</text>
   </svg>`,
 
   // Spiral + scrawl
   `<svg class="inline-sketch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60" height="60">
     <path d="M40,30 Q42,20 50,20 Q62,20 62,30 Q62,44 46,44 Q28,44 28,26 Q28,8 52,8 Q72,8 72,30" stroke="#1C1410" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.2"/>
-    <text x="88" y="22" font-family="HelpMe,cursive" font-size="13" fill="#4A1515" opacity="0.25" font-weight="600" transform="rotate(-1,88,22)">WHY WHY WHY WHY WHY WHY</text>
-    <text x="88" y="42" font-family="HelpMe,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,88,42)">i keep coming back to this</text>
+    <text x="88" y="22" font-family="DK Face Your Fears,cursive" font-size="13" fill="#4A1515" opacity="0.25" font-weight="600" transform="rotate(-1,88,22)">WHY WHY WHY WHY WHY WHY</text>
+    <text x="88" y="42" font-family="DK Face Your Fears,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,88,42)">i keep coming back to this</text>
   </svg>`,
 
   // Cross / X marks
@@ -270,7 +292,7 @@ const SKETCHES = [
       <line x1="95" y1="12" x2="115" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="115" y1="12" x2="95" y2="42" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round"/>
     </g>
-    <text x="140" y="32" font-family="HelpMe,cursive" font-size="12" fill="#1C1410" opacity="0.2" transform="rotate(-0.8,140,32)">these are the ones I know about</text>
+    <text x="140" y="32" font-family="DK Face Your Fears,cursive" font-size="12" fill="#1C1410" opacity="0.2" transform="rotate(-0.8,140,32)">these are the ones I know about</text>
   </svg>`,
 
   // Scrawled face — oval, eyes, frown
@@ -289,9 +311,9 @@ const SKETCHES = [
       <path d="M0,-32 Q5,-42 12,-30" stroke="#1C1410" stroke-width="1" fill="none"/>
       <path d="M14,-26 Q22,-34 20,-18" stroke="#1C1410" stroke-width="1" fill="none"/>
     </g>
-    <text x="90" y="28" font-family="HelpMe,cursive" font-size="11" fill="#4A1515" opacity="0.22" transform="rotate(-1.5,90,28)">i know this face</text>
-    <text x="90" y="48" font-family="HelpMe,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,90,48)">they always look the same</text>
-    <text x="90" y="66" font-family="HelpMe,cursive" font-size="9" fill="#4A1515" opacity="0.15" transform="rotate(-0.8,90,66)">the eyes. always the eyes.</text>
+    <text x="90" y="28" font-family="DK Face Your Fears,cursive" font-size="11" fill="#4A1515" opacity="0.22" transform="rotate(-1.5,90,28)">i know this face</text>
+    <text x="90" y="48" font-family="DK Face Your Fears,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(0.5,90,48)">they always look the same</text>
+    <text x="90" y="66" font-family="DK Face Your Fears,cursive" font-size="9" fill="#4A1515" opacity="0.15" transform="rotate(-0.8,90,66)">the eyes. always the eyes.</text>
   </svg>`,
 
   // Dagger / knife sketch
@@ -302,16 +324,16 @@ const SKETCHES = [
       <line x1="-6" y1="20" x2="6" y2="20" stroke="#4A1515" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="-5" y1="23" x2="5" y2="23" stroke="#4A1515" stroke-width="1" stroke-linecap="round"/>
     </g>
-    <text x="75" y="22" font-family="HelpMe,cursive" font-size="13" fill="#4A1515" opacity="0.22" font-weight="700" transform="rotate(-0.5,75,22)">AGAIN</text>
-    <text x="75" y="40" font-family="HelpMe,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(1,75,40)">and again</text>
-    <text x="75" y="54" font-family="HelpMe,cursive" font-size="9" fill="#1C1410" opacity="0.14" transform="rotate(-0.5,75,54)">and again</text>
+    <text x="75" y="22" font-family="DK Face Your Fears,cursive" font-size="13" fill="#4A1515" opacity="0.22" font-weight="700" transform="rotate(-0.5,75,22)">AGAIN</text>
+    <text x="75" y="40" font-family="DK Face Your Fears,cursive" font-size="10" fill="#1C1410" opacity="0.18" transform="rotate(1,75,40)">and again</text>
+    <text x="75" y="54" font-family="DK Face Your Fears,cursive" font-size="9" fill="#1C1410" opacity="0.14" transform="rotate(-0.5,75,54)">and again</text>
   </svg>`,
 
   // Zigzag / frantic lines + text
   `<svg class="inline-sketch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 45" height="45">
     <polyline points="10,22 25,8 40,36 55,8 70,36 85,8 100,36 115,22" stroke="#1C1410" stroke-width="1.2" fill="none" opacity="0.18" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="130" y="20" font-family="HelpMe,cursive" font-size="11" fill="#4A1515" opacity="0.25" transform="rotate(-2,130,20)">the pattern never stops</text>
-    <text x="130" y="38" font-family="HelpMe,cursive" font-size="9" fill="#1C1410" opacity="0.18">i can see it now</text>
+    <text x="130" y="20" font-family="DK Face Your Fears,cursive" font-size="11" fill="#4A1515" opacity="0.25" transform="rotate(-2,130,20)">the pattern never stops</text>
+    <text x="130" y="38" font-family="DK Face Your Fears,cursive" font-size="9" fill="#1C1410" opacity="0.18">i can see it now</text>
   </svg>`,
 
   // Map-pin / location dots + names
@@ -330,7 +352,7 @@ const SKETCHES = [
       <line x1="35" y1="30" x2="85" y2="28" stroke="#1C1410" stroke-width="0.8" stroke-dasharray="3,3"/>
       <line x1="95" y1="28" x2="145" y2="30" stroke="#1C1410" stroke-width="0.8" stroke-dasharray="3,3"/>
     </g>
-    <text x="175" y="28" font-family="HelpMe,cursive" font-size="11" fill="#1C1410" opacity="0.2" transform="rotate(-1)">connected. all connected.</text>
+    <text x="175" y="28" font-family="DK Face Your Fears,cursive" font-size="11" fill="#1C1410" opacity="0.2" transform="rotate(-1)">connected. all connected.</text>
   </svg>`,
 ];
 
@@ -358,70 +380,30 @@ function indexLetter(name) {
   return sortLastName(name).charAt(0).toUpperCase();
 }
 
-// ── IMPROVED YEARS EXTRACTOR ──────────────────────────────────
 function extractYears(text) {
   if (!text) return null;
-
-  // from 1978 to 1983 / from 1978 until 1983
-  const fromTo = text.match(/\bfrom\s+(1[89]\d{2}|20[012]\d)\s+(?:to|until|til)\s+(1[89]\d{2}|20[012]\d)\b/i);
-  if (fromTo) return `${fromTo[1]}–${fromTo[2]}`;
-
-  // between 1974 and 1978
-  const betweenAnd = text.match(/\bbetween\s+(1[89]\d{2}|20[012]\d)\s+and\s+(1[89]\d{2}|20[012]\d)\b/i);
-  if (betweenAnd) return `${betweenAnd[1]}–${betweenAnd[2]}`;
-
-  // committed ... between 1974 and 1978
-  const committedBetween = text.match(/\b(?:committed|active|operat(?:ed|ing)|murder(?:ed|ing)).{0,80}\bbetween\s+(1[89]\d{2}|20[012]\d)\s+and\s+(1[89]\d{2}|20[012]\d)\b/i);
-  if (committedBetween) return `${committedBetween[1]}–${committedBetween[2]}`;
-
-  // 1978–1983 or 1978-1983
-  const dash = text.match(/\b(1[89]\d{2}|20[012]\d)\s*[–\-]\s*(1[89]\d{2}|20[012]\d)\b/);
+  const range = text.match(/(?:from|between|active)\s+(1[89]\d{2}|20[012]\d)\s+(?:to|and|until|–|-)\s+(1[89]\d{2}|20[012]\d)/i);
+  if (range) return `${range[1]}–${range[2]}`;
+  const dash = text.match(/(1[89]\d{2})\s*[–\-]\s*(1[89]\d{2}|20[012]\d)/);
   if (dash) return `${dash[1]}–${dash[2]}`;
-
   return null;
 }
 
-// ── IMPROVED COUNTRY EXTRACTOR ────────────────────────────────
 function extractCountry(text) {
   if (!text) return null;
-  const t = text.toLowerCase();
-
   const map = [
-    ['american','United States'],
-    ['british','United Kingdom'],
-    ['english','United Kingdom'],
-    ['scottish','United Kingdom'],
-    ['welsh','United Kingdom'],
-    ['irish','Ireland'],
-    ['canadian','Canada'],
-    ['german','Germany'],
-    ['austrian','Austria'],
-    ['french','France'],
-    ['italian','Italy'],
-    ['spanish','Spain'],
-    ['portuguese','Portugal'],
-    ['dutch','Netherlands'],
-    ['belgian','Belgium'],
-    ['swedish','Sweden'],
-    ['norwegian','Norway'],
-    ['finnish','Finland'],
-    ['polish','Poland'],
-    ['russian','Russia'],
-    ['ukrainian','Ukraine'],
-    ['australian','Australia'],
-    ['new zealand','New Zealand'],
-    ['japanese','Japan'],
-    ['chinese','China'],
-    ['hong kong','Hong Kong'],
-    ['korean','South Korea'],
-    ['mexican','Mexico'],
-    ['brazilian','Brazil'],
-    ['colombian','Colombia'],
-    ['south african','South Africa'],
+    ['American','United States'],['British','United Kingdom'],
+    ['Canadian','Canada'],['German','Germany'],
+    ['Russian','Russia'],['Australian','Australia'],
+    ['French','France'],['Italian','Italy'],
+    ['Scottish','United Kingdom'],['English','United Kingdom'],
+    ['Ukrainian','Ukraine'],['Colombian','Colombia'],
+    ['Belgian','Belgium'],['Japanese','Japan'],
+    ['South African','South Africa'],['Polish','Poland'],
+    ['Dutch','Netherlands'],
   ];
-
   for (const [adj, country] of map) {
-    if (t.includes(adj)) return country;
+    if (text.includes(adj)) return country;
   }
   return null;
 }
