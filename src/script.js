@@ -1,183 +1,205 @@
 console.log('📖 The Keepsake Ledger — UNHINGED EDITION');
 
-// ── STATIC RECORDS ────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────
+   WIKIPEDIA TITLE CORRECTIONS
+────────────────────────────────────────────────────────────── */
+const WIKI_TITLES = {
+  "Otis Toole": "Ottis Toole",
+  "Graham Frederick Young": "Graham Young",
+  "Theodore John KACZYNSKI": "Ted Kaczynski",
+  "John Joseph JOUBERT IV": "John Joubert (serial killer)",
+  "Johann UNTERWEGER": "Jack Unterweger",
+  "Yavuz YAPICIOĞLU": "Yavuz Yapıcıoğlu",
+  "José Antonio RODRÍGUEZ VEGA": "José Antonio Rodríguez Vega",
+  "James Spyridon VLASSAKIS": "Snowtown murders",
+  "Robert Joe Wagner": "Snowtown murders",
+  "Bruce McArthur": "2010–2017 Toronto serial homicides"
+};
+
+/* ──────────────────────────────────────────────────────────────
+   STATIC OVERRIDES (kept from your original)
+────────────────────────────────────────────────────────────── */
 const STATIC = {
   "Dennis Nilsen": {
-    name:"Dennis Nilsen", nickname:"The Muswell Hill Murderer",
-    years_active:"1978–1983", country:"United Kingdom",
+    name:"Dennis Nilsen",
+    nickname:"The Muswell Hill Murderer",
+    years_active:"1978–1983",
+    country:"United Kingdom",
     method:"Strangulation, drowning",
     description:"Scottish serial killer who murdered at least fifteen young men in London, keeping their bodies in his home before disposal. Arrested in 1983 after human remains blocked a drain.",
     wikipedia_url:"https://en.wikipedia.org/wiki/Dennis_Nilsen",
     image:"https://upload.wikimedia.org/wikipedia/en/5/5b/Dennis_Nilsen_police_photo.jpg",
-    status:"DECEASED", death_date:"2018",
+    status:"DECEASED",
+    death_date:"2018"
   },
   "Peter Kürten": {
-    name:"Peter Kürten", nickname:"The Vampire of Düsseldorf",
-    years_active:"1913–1930", country:"Germany",
+    name:"Peter Kürten",
+    nickname:"The Vampire of Düsseldorf",
+    years_active:"1913–1930",
+    country:"Germany",
     method:"Stabbing, strangulation",
-    description:"German serial killer active primarily in Düsseldorf. Committed multiple murders and assaults of extreme violence. Arrested in 1930 and guillotined the following year.",
+    description:"German serial killer active primarily in Düsseldorf. Arrested in 1930 and guillotined in 1931.",
     wikipedia_url:"https://en.wikipedia.org/wiki/Peter_K%C3%BCrten",
     image:"https://upload.wikimedia.org/wikipedia/commons/4/45/Peter_K%C3%BCrten.jpg",
-    status:"EXECUTED", death_date:"1931",
-  },
+    status:"EXECUTED",
+    death_date:"1931"
+  }
 };
 
+/* ──────────────────────────────────────────────────────────────
+   VERIFIED STATUS
+────────────────────────────────────────────────────────────── */
 const KNOWN_STATUS = {
-  "Ted Bundy":           {status:"EXECUTED",  death_date:"1989"},
-  "Jeffrey Dahmer":      {status:"DECEASED",  death_date:"1994"},
-  "John Wayne Gacy":     {status:"EXECUTED",  death_date:"1994"},
-  "Gary Ridgway":        {status:"IN PRISON"},
-  "Andrei Chikatilo":    {status:"EXECUTED",  death_date:"1994"},
-  "Harold Shipman":      {status:"DECEASED",  death_date:"2004"},
-  "Aileen Wuornos":      {status:"EXECUTED",  death_date:"2002"},
-  "Richard Ramirez":     {status:"DECEASED",  death_date:"2013"},
-  "Edmund Kemper":       {status:"IN PRISON"},
-  "Dennis Rader":        {status:"IN PRISON"},
-  "Albert Fish":         {status:"EXECUTED",  death_date:"1936"},
-  "David Berkowitz":     {status:"IN PRISON"},
-  "Samuel Little":       {status:"DECEASED",  death_date:"2020"},
-  "Rodney Alcala":       {status:"DECEASED",  death_date:"2021"},
-  "H.H. Holmes":         {status:"EXECUTED",  death_date:"1896"},
-  "Robert Pickton":      {status:"IN PRISON"},
-  "Dean Corll":          {status:"DECEASED",  death_date:"1973"},
-  "Ed Gein":             {status:"DECEASED",  death_date:"1984"},
+  "Ted Bundy":{status:"EXECUTED",death_date:"1989"},
+  "Jeffrey Dahmer":{status:"DECEASED",death_date:"1994"},
+  "John Wayne Gacy":{status:"EXECUTED",death_date:"1994"},
+  "Gary Ridgway":{status:"IN PRISON"},
+  "Andrei Chikatilo":{status:"EXECUTED",death_date:"1994"},
+  "Harold Shipman":{status:"DECEASED",death_date:"2004"},
+  "Aileen Wuornos":{status:"EXECUTED",death_date:"2002"},
+  "Richard Ramirez":{status:"DECEASED",death_date:"2013"},
+  "Edmund Kemper":{status:"IN PRISON"},
+  "Dennis Rader":{status:"IN PRISON"},
+  "Albert Fish":{status:"EXECUTED",death_date:"1936"},
+  "David Berkowitz":{status:"IN PRISON"},
+  "Samuel Little":{status:"DECEASED",death_date:"2020"},
+  "Rodney Alcala":{status:"DECEASED",death_date:"2021"},
+  "H.H. Holmes":{status:"EXECUTED",death_date:"1896"},
+  "Robert Pickton":{status:"IN PRISON"},
+  "Dean Corll":{status:"DECEASED",death_date:"1973"},
+  "Ed Gein":{status:"DECEASED",death_date:"1984"},
   "Alexander Pichushkin":{status:"IN PRISON"},
-  "Paul Bernardo":       {status:"IN PRISON"},
-  "Joachim Kroll":       {status:"DECEASED",  death_date:"1991"},
-  "Peter Sutcliffe":     {status:"DECEASED",  death_date:"2020"},
-  "Ian Brady":           {status:"DECEASED",  death_date:"2017"},
-  "Anatoly Onoprienko":  {status:"DECEASED",  death_date:"2013"},
-  "Gary Heidnik":        {status:"EXECUTED",  death_date:"1999"},
-  "Fred West":           {status:"DECEASED",  death_date:"1995"},
-  "Arthur Shawcross":    {status:"DECEASED",  death_date:"2008"},
-  "Wayne Williams":      {status:"IN PRISON"},
-  "Richard Cottingham":  {status:"IN PRISON"},
-  "Randy Kraft":         {status:"IN PRISON"},
-  "Robert Hansen":       {status:"DECEASED",  death_date:"2014"},
-  "Joseph DeAngelo":     {status:"IN PRISON"},
-  "Charles Cullen":      {status:"IN PRISON"},
-  "Marc Dutroux":        {status:"IN PRISON"},
-  "Bruce McArthur":      {status:"IN PRISON"},
-  "William Bonin":       {status:"EXECUTED",  death_date:"1996"},
-  "Donald Gaskins":      {status:"EXECUTED",  death_date:"1991"},
-  "David Parker Ray":    {status:"DECEASED",  death_date:"2002"},
-  "Tsutomu Miyazaki":    {status:"EXECUTED",  death_date:"2008"},
-  "Mikhail Popkov":      {status:"IN PRISON"},
-  "Jack the Ripper":     {status:"UNIDENTIFIED"},
-  "Zodiac Killer":       {status:"UNIDENTIFIED"},
-  "Dennis Nilsen":       {status:"DECEASED",  death_date:"2018"},
-  "Peter Kürten":        {status:"EXECUTED",  death_date:"1931"},
+  "Paul Bernardo":{status:"IN PRISON"},
+  "Joachim Kroll":{status:"DECEASED",death_date:"1991"},
+  "Peter Sutcliffe":{status:"DECEASED",death_date:"2020"},
+  "Ian Brady":{status:"DECEASED",death_date:"2017"},
+  "Anatoly Onoprienko":{status:"DECEASED",death_date:"2013"},
+  "Gary Heidnik":{status:"EXECUTED",death_date:"1999"},
+  "Fred West":{status:"DECEASED",death_date:"1995"},
+  "Arthur Shawcross":{status:"DECEASED",death_date:"2008"},
+  "Wayne Williams":{status:"IN PRISON"},
+  "Richard Cottingham":{status:"IN PRISON"},
+  "Randy Kraft":{status:"IN PRISON"},
+  "Robert Hansen":{status:"DECEASED",death_date:"2014"},
+  "Joseph DeAngelo":{status:"IN PRISON"},
+  "Charles Cullen":{status:"IN PRISON"},
+  "Marc Dutroux":{status:"IN PRISON"},
+  "Bruce McArthur":{status:"IN PRISON"},
+  "William Bonin":{status:"EXECUTED",death_date:"1996"},
+  "Donald Gaskins":{status:"EXECUTED",death_date:"1991"},
+  "David Parker Ray":{status:"DECEASED",death_date:"2002"},
+  "Tsutomu Miyazaki":{status:"EXECUTED",death_date:"2008"},
+  "Mikhail Popkov":{status:"IN PRISON"},
+  "Jack the Ripper":{status:"UNIDENTIFIED"},
+  "Zodiac Killer":{status:"UNIDENTIFIED"},
+  "Dennis Nilsen":{status:"DECEASED",death_date:"2018"},
+  "Peter Kürten":{status:"EXECUTED",death_date:"1931"},
 
-  // ── NEW REAL ADDITIONS ──
-  "Leonard Lake":        {status:"DECEASED",  death_date:"1985"},
-  "Charles Ng":          {status:"IN PRISON"},
-  "Peter Tobin":         {status:"DECEASED",  death_date:"2022"},
-  "Robert Maudsley":     {status:"IN PRISON"},
-  "Israel Keyes":        {status:"DECEASED",  death_date:"2012"},
-  "Robert Berdella":     {status:"DECEASED",  death_date:"1992"},
-  "Steven Pennell":      {status:"EXECUTED",  death_date:"1992"},
-  "Cary Stayner":        {status:"IN PRISON"},
-  "John Bunting":        {status:"IN PRISON"},
-  "Robert Black":        {status:"DECEASED",  death_date:"2016"},
+  /* NEW */
+  "Robert Lee Yates":{status:"IN PRISON"},
+  "Otis Toole":{status:"DECEASED",death_date:"1996"},
+  "Graham Frederick Young":{status:"DECEASED",death_date:"1990"},
+  "Yavuz YAPICIOĞLU":{status:"IN PRISON"},
+  "Robert Joe Wagner":{status:"IN PRISON"},
+  "James Spyridon VLASSAKIS":{status:"IN PRISON"},
+  "José Antonio RODRÍGUEZ VEGA":{status:"DECEASED",death_date:"2002"},
+  "Darren Deon Vann":{status:"IN PRISON"},
+  "Andrew URDIALES":{status:"DECEASED",death_date:"2018"},
+  "Johann UNTERWEGER":{status:"DECEASED",death_date:"1994"},
+  "Colin Ireland":{status:"DECEASED",death_date:"2012"},
+  "Keith Hunter Jesperson":{status:"IN PRISON"},
+  "John Joseph JOUBERT IV":{status:"EXECUTED",death_date:"1996"},
+  "Theodore John KACZYNSKI":{status:"DECEASED",death_date:"2023"},
+  "Ali Kaya":{status:"IN PRISON"},
+  "Patrick Wayne Kearney":{status:"IN PRISON"},
+  "Larry William Eyler":{status:"DECEASED",death_date:"1994"},
+  "Walter Earl Ellis":{status:"DECEASED",death_date:"2013"},
+  "Donald Leroy Evans":{status:"DECEASED",death_date:"1999"},
+  "Robert Maudsley":{status:"IN PRISON"}
 };
 
-const KNOWN_METHODS = {
-  "Ted Bundy":           "Strangulation, bludgeoning",
-  "Jeffrey Dahmer":      "Strangulation, drugging",
-  "John Wayne Gacy":     "Strangulation, asphyxiation",
-  "Gary Ridgway":        "Strangulation",
-  "Andrei Chikatilo":    "Stabbing, mutilation",
-  "Harold Shipman":      "Lethal injection (diamorphine)",
-  "Aileen Wuornos":      "Shooting",
-  "Richard Ramirez":     "Shooting, stabbing, strangulation",
-  "Edmund Kemper":       "Shooting, stabbing, strangulation",
-  "Dennis Rader":        "Strangulation, asphyxiation",
-  "Albert Fish":         "Strangulation, stabbing",
-  "David Berkowitz":     "Shooting",
-  "H.H. Holmes":         "Various, including gassing",
-  "Dean Corll":          "Shooting, strangulation",
-  "Ed Gein":             "Shooting",
-  "Alexander Pichushkin":"Bludgeoning",
-  "Peter Sutcliffe":     "Bludgeoning, stabbing",
-  "Ian Brady":           "Strangulation, shooting",
-  "Gary Heidnik":        "Strangulation, electrocution",
-  "Fred West":           "Strangulation, mutilation",
-  "Arthur Shawcross":    "Strangulation",
-  "Wayne Williams":      "Strangulation, asphyxiation",
-  "Richard Cottingham":  "Strangulation, stabbing",
-  "William Bonin":       "Strangulation",
-  "Donald Gaskins":      "Various methods",
-  "Tsutomu Miyazaki":    "Strangulation",
-  "Mikhail Popkov":      "Stabbing, axe",
-  "Dennis Nilsen":       "Strangulation, drowning",
-  "Peter Kürten":        "Stabbing, strangulation",
+/* ──────────────────────────────────────────────────────────────
+   EXPANDED COUNTRY PARSER
+────────────────────────────────────────────────────────────── */
+function extractCountry(text){
+  if(!text) return null;
+  const map=[
+    ['American','United States'],['British','United Kingdom'],
+    ['Canadian','Canada'],['German','Germany'],
+    ['Russian','Russia'],['Australian','Australia'],
+    ['French','France'],['Italian','Italy'],
+    ['Scottish','United Kingdom'],['English','United Kingdom'],
+    ['Welsh','United Kingdom'],['Irish','Ireland'],
+    ['Spanish','Spain'],['Turkish','Turkey'],
+    ['Austrian','Austria'],['Swedish','Sweden'],
+    ['Norwegian','Norway'],['Danish','Denmark'],
+    ['Finnish','Finland'],['Greek','Greece'],
+    ['Ukrainian','Ukraine'],['Colombian','Colombia'],
+    ['Belgian','Belgium'],['Japanese','Japan'],
+    ['South African','South Africa'],['Polish','Poland'],
+    ['Dutch','Netherlands']
+  ];
+  for(const [adj,country] of map){
+    if(text.includes(adj)) return country;
+  }
+  return null;
+}
 
-  // ── NEW REAL ADDITIONS ──
-  "Leonard Lake":        "Kidnapping, torture, murder (multiple methods)",
-  "Charles Ng":          "Kidnapping, torture, murder (multiple methods)",
-  "Peter Tobin":         "Sexual assault, murder (varied)",
-  "Robert Maudsley":     "Killing in custody (varied)",
-  "Israel Keyes":        "Abduction, shooting/strangulation (varied)",
-  "Robert Berdella":     "Torture, strangulation",
-  "Steven Pennell":      "Stabbing, strangulation",
-  "Cary Stayner":        "Strangulation",
-  "John Bunting":        "Torture, murder (varied)",
-  "Robert Black":        "Abduction, sexual assault, murder (varied)",
-};
+/* ──────────────────────────────────────────────────────────────
+   FETCH (merged + corrected)
+────────────────────────────────────────────────────────────── */
+async function fetchKiller(name){
+  if(STATIC[name]){
+    const st=KNOWN_STATUS[name]||{};
+    return {...STATIC[name],status:st.status||STATIC[name].status,death_date:st.death_date||STATIC[name].death_date};
+  }
 
-const KNOWN_NICKNAMES = {
-  "Ted Bundy":           "The Lady Killer",
-  "Jeffrey Dahmer":      "The Milwaukee Cannibal",
-  "John Wayne Gacy":     "The Killer Clown",
-  "Gary Ridgway":        "The Green River Killer",
-  "Andrei Chikatilo":    "The Butcher of Rostov",
-  "Harold Shipman":      "Doctor Death",
-  "Aileen Wuornos":      "Damsel of Death",
-  "Richard Ramirez":     "The Night Stalker",
-  "Edmund Kemper":       "The Co-ed Killer",
-  "Dennis Rader":        "BTK Killer",
-  "Albert Fish":         "The Gray Man",
-  "David Berkowitz":     "Son of Sam",
-  "Samuel Little":       "The Traveling Man",
-  "Rodney Alcala":       "The Dating Game Killer",
-  "H.H. Holmes":         "America's First Serial Killer",
-  "Robert Pickton":      "The Pig Farmer Killer",
-  "Dean Corll":          "The Candy Man",
-  "Alexander Pichushkin":"The Chessboard Killer",
-  "Peter Sutcliffe":     "The Yorkshire Ripper",
-  "Ian Brady":           "The Moors Murderer",
-  "Fred West":           "The Gloucester Murderer",
-  "Donald Gaskins":      "Pee Wee",
-  "Jack the Ripper":     "Saucy Jacky",
-  "Zodiac Killer":       "The Zodiac",
-  "Dennis Nilsen":       "The Muswell Hill Murderer",
-  "Peter Kürten":        "The Vampire of Düsseldorf",
+  const title=WIKI_TITLES[name]||name;
+  const res=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
+  const d=await res.json();
+  if(!d.extract||d.type==='disambiguation'||d.extract.length<80) return null;
 
-  // ── NEW REAL ADDITIONS ──
-  "Robert Berdella":     "The Kansas City Butcher",
-  "Steven Pennell":      "The Route 40 Killer",
-  "Cary Stayner":        "Yosemite Park Killer",
-  "John Bunting":        "The Snowtown Killer",
-  "Robert Black":        "The Cross-Country Killer",
-};
+  const st=KNOWN_STATUS[name]||KNOWN_STATUS[title]||{};
 
-const KILLERS = [
-  "Ted Bundy","Jeffrey Dahmer","John Wayne Gacy","Gary Ridgway",
-  "Andrei Chikatilo","Harold Shipman","Aileen Wuornos","Richard Ramirez",
-  "Edmund Kemper","Dennis Rader","Albert Fish","David Berkowitz",
-  "Samuel Little","Rodney Alcala","H.H. Holmes","Robert Pickton",
-  "Dean Corll","Ed Gein","Alexander Pichushkin","Paul Bernardo",
-  "Joachim Kroll","Peter Sutcliffe","Ian Brady","Anatoly Onoprienko",
-  "Gary Heidnik","Fred West","Arthur Shawcross","Wayne Williams",
-  "Richard Cottingham","Randy Kraft","Robert Hansen","Joseph DeAngelo",
-  "Charles Cullen","Marc Dutroux","Bruce McArthur","William Bonin",
-  "Donald Gaskins","David Parker Ray","Tsutomu Miyazaki","Mikhail Popkov",
-  "Jack the Ripper","Zodiac Killer","Dennis Nilsen","Peter Kürten",
+  return{
+    name,
+    nickname:null,
+    years_active:null,
+    country:extractCountry(d.extract),
+    method:null,
+    description:d.extract,
+    wikipedia_url:d.content_urls?.desktop?.page||null,
+    image:d.thumbnail?.source||null,
+    status:st.status||'UNKNOWN',
+    death_date:st.death_date||null
+  };
+}
 
-  // ── NEW REAL ADDITIONS ──
-  "Leonard Lake","Charles Ng","Peter Tobin","Robert Maudsley",
-  "Israel Keyes","Robert Berdella","Steven Pennell","Cary Stayner",
-  "John Bunting","Robert Black",
+/* ──────────────────────────────────────────────────────────────
+   MASTER KILLER LIST
+────────────────────────────────────────────────────────────── */
+const KILLERS=[
+
+"Ted Bundy","Jeffrey Dahmer","John Wayne Gacy","Gary Ridgway",
+"Andrei Chikatilo","Harold Shipman","Aileen Wuornos","Richard Ramirez",
+"Edmund Kemper","Dennis Rader","Albert Fish","David Berkowitz",
+"Samuel Little","Rodney Alcala","H.H. Holmes","Robert Pickton",
+"Dean Corll","Ed Gein","Alexander Pichushkin","Paul Bernardo",
+"Joachim Kroll","Peter Sutcliffe","Ian Brady","Anatoly Onoprienko",
+"Gary Heidnik","Fred West","Arthur Shawcross","Wayne Williams",
+"Richard Cottingham","Randy Kraft","Robert Hansen","Joseph DeAngelo",
+"Charles Cullen","Marc Dutroux","Bruce McArthur","William Bonin",
+"Donald Gaskins","David Parker Ray","Tsutomu Miyazaki","Mikhail Popkov",
+"Jack the Ripper","Zodiac Killer","Dennis Nilsen","Peter Kürten",
+
+"Robert Lee Yates","Otis Toole","Graham Frederick Young",
+"Yavuz YAPICIOĞLU","Robert Joe Wagner","James Spyridon VLASSAKIS",
+"José Antonio RODRÍGUEZ VEGA","Darren Deon Vann","Andrew URDIALES",
+"Johann UNTERWEGER","Colin Ireland","Keith Hunter Jesperson",
+"John Joseph JOUBERT IV","Theodore John KACZYNSKI","Ali Kaya",
+"Patrick Wayne Kearney","Larry William Eyler","Walter Earl Ellis",
+"Donald Leroy Evans","Robert Maudsley"
+
 ];
 
 const ROTATIONS = ['rotate-n1','rotate-p1','rotate-n2','rotate-p2','rotate-p3','rotate-p1'];
