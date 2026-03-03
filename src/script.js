@@ -372,7 +372,9 @@ let letterQ = 'ALL';
 let statusQ = 'ALL';
 let searchQ = '';
 
-const BASE_URL = import.meta.env.BASE_URL || '/';
+const BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL)
+  ? import.meta.env.BASE_URL
+  : '/';
 
 // ── HELPERS ───────────────────────────────────────────────────
 function esc(s) {
