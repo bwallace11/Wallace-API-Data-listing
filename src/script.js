@@ -372,6 +372,8 @@ let letterQ = 'ALL';
 let statusQ = 'ALL';
 let searchQ = '';
 
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
 // ── HELPERS ───────────────────────────────────────────────────
 function esc(s) {
   return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -420,9 +422,10 @@ function extractCountry(text) {
 
 function resolveImagePath(path) {
   if (!path) return null;
-  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('/')) return path;
-  if (path.startsWith('images/')) return `/${path}`;
-  return `/images/serial-killers/${path}`;
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  if (path.startsWith('/')) return `${BASE_URL}${path.replace(/^\//, '')}`;
+  if (path.startsWith('images/')) return `${BASE_URL}${path}`;
+  return `${BASE_URL}images/serial-killers/${path}`;
 }
 
 async function logMissingLocalOverrideImages() {
@@ -430,7 +433,7 @@ async function logMissingLocalOverrideImages() {
     const src = resolveImagePath(file);
     if (!src || src.startsWith('http://') || src.startsWith('https://')) return;
     try {
-      const res = await fetch(src, { method: 'HEAD' });
+      const res = await fetch(src, { cache: 'no-store' });
       if (!res.ok) {
         console.warn(`Missing local image for ${name}: ${src}`);
       }
@@ -474,7 +477,7 @@ async function fetchKiller(name) {
 
 async function loadData() {
   try {
-    const local = await fetch('/serial_killers_with_local_images.json');
+    const local = await fetch(`${BASE_URL}serial_killers_with_local_images.json`);
     if (local.ok) {
       const json = await local.json();
       allData = json.map(k => {
