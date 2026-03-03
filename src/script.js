@@ -446,6 +446,41 @@ async function logMissingLocalOverrideImages() {
   await Promise.all(checks);
 }
 
+async function fetchWikiSummary(name) {
+  try {
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`);
+    if (!res.ok) return null;
+    const d = await res.json();
+    if (!d || d.type === 'disambiguation') return null;
+    return {
+      extract: d.extract || null,
+      image: d.thumbnail?.source || null,
+      url: d.content_urls?.desktop?.page || null,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+async function fetchWikiPage(name) {
+  try {
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts|pageimages|info&exintro=1&explaintext=1&inprop=url&piprop=thumbnail&pithumbsize=600&titles=${encodeURIComponent(name)}`;
+    const res = await fetch(apiUrl);
+    if (!res.ok) return null;
+    const json = await res.json();
+    const pages = json?.query?.pages ? Object.values(json.query.pages) : [];
+    const page = pages.find(p => p && !p.missing) || null;
+    if (!page) return null;
+    return {
+      extract: page.extract || null,
+      image: page.thumbnail?.source || null,
+      url: page.fullurl || null,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
 // ── FETCH ─────────────────────────────────────────────────────
 async function fetchKiller(name) {
   if (STATIC[name]) {
@@ -453,24 +488,17 @@ async function fetchKiller(name) {
     return {...STATIC[name], status:st.status||'UNKNOWN', death_date:st.death_date||STATIC[name].death_date};
   }
 
-  let page = null;
-  try {
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts|pageimages|info&exintro=1&explaintext=1&inprop=url&piprop=thumbnail&pithumbsize=600&titles=${encodeURIComponent(name)}`;
-    const res = await fetch(apiUrl);
-    if (res.ok) {
-      const json = await res.json();
-      const pages = json?.query?.pages ? Object.values(json.query.pages) : [];
-      page = pages.find(p => p && !p.missing) || null;
-    }
-  } catch (_) {}
+  const [summary, page] = await Promise.all([
+    fetchWikiSummary(name),
+    fetchWikiPage(name),
+  ]);
 
-  const extract = page?.extract || '';
-  const hasUsableExtract = extract.length >= 80;
-  if (!hasUsableExtract) return null;
+  const extract = page?.extract || summary?.extract || '';
+  if (extract.length < 80) return null;
 
   const st = KNOWN_STATUS[name] || {};
   const localImage = resolveImagePath(LOCAL_IMAGE_OVERRIDES[name]);
-  const wikiImage = page?.thumbnail?.source || null;
+  const wikiImage = page?.image || summary?.image || null;
   return {
     name,
     nickname:     KNOWN_NICKNAMES[name]||null,
@@ -478,7 +506,7 @@ async function fetchKiller(name) {
     country:      extractCountry(extract),
     method:       KNOWN_METHODS[name]||null,
     description:  extract,
-    wikipedia_url: page?.fullurl || null,
+    wikipedia_url: page?.url || summary?.url || null,
     image:        localImage || wikiImage,
     status:       st.status||'UNKNOWN',
     death_date:   st.death_date||null,
