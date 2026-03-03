@@ -450,64 +450,40 @@ async function fetchKiller(name) {
     const st = KNOWN_STATUS[name] || {};
     return {...STATIC[name], status:st.status||'UNKNOWN', death_date:st.death_date||STATIC[name].death_date};
   }
-  const localImage = resolveImagePath(LOCAL_IMAGE_OVERRIDES[name]);
-  let d = null;
+
+  let page = null;
   try {
-    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`);
-    if (res.ok) d = await res.json();
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts|pageimages|info&exintro=1&explaintext=1&inprop=url&piprop=thumbnail&pithumbsize=600&titles=${encodeURIComponent(name)}`;
+    const res = await fetch(apiUrl);
+    if (res.ok) {
+      const json = await res.json();
+      const pages = json?.query?.pages ? Object.values(json.query.pages) : [];
+      page = pages.find(p => p && !p.missing) || null;
+    }
   } catch (_) {}
 
-  const hasUsableExtract = !!(d?.extract && d.type !== 'disambiguation' && d.extract.length >= 80);
-  if (!hasUsableExtract && !localImage) return null;
+  const extract = page?.extract || '';
+  const hasUsableExtract = extract.length >= 80;
+  if (!hasUsableExtract) return null;
 
   const st = KNOWN_STATUS[name] || {};
+  const localImage = resolveImagePath(LOCAL_IMAGE_OVERRIDES[name]);
+  const wikiImage = page?.thumbnail?.source || null;
   return {
     name,
     nickname:     KNOWN_NICKNAMES[name]||null,
-    years_active: extractYears(d?.extract),
-    country:      extractCountry(d?.extract),
+    years_active: extractYears(extract),
+    country:      extractCountry(extract),
     method:       KNOWN_METHODS[name]||null,
-    description:  d?.extract || 'No Wikipedia summary available for this record.',
-    wikipedia_url: d?.content_urls?.desktop?.page||null,
-    image:        d?.thumbnail?.source||localImage||null,
+    description:  extract,
+    wikipedia_url: page?.fullurl || null,
+    image:        localImage || wikiImage,
     status:       st.status||'UNKNOWN',
     death_date:   st.death_date||null,
   };
 }
 
 async function loadData() {
-  try {
-    const local = await fetch(`${BASE_URL}serial_killers_with_local_images.json`);
-    if (local.ok) {
-      const json = await local.json();
-      allData = json.map(k => {
-        const st=KNOWN_STATUS[k.name]||{}, sc=STATIC[k.name]||{};
-        const imageOverride = resolveImagePath(LOCAL_IMAGE_OVERRIDES[k.name]);
-        const imageFromData = resolveImagePath(sc.image || k.image);
-        return {
-          name: sc.name||k.name,
-          nickname: sc.nickname||KNOWN_NICKNAMES[k.name]||null,
-          years_active: sc.years_active||k.years_active||extractYears(k.description),
-          country: sc.country||extractCountry(k.description||''),
-          method: sc.method||KNOWN_METHODS[k.name]||null,
-          description: sc.description||k.description,
-          wikipedia_url: sc.wikipedia_url||k.wikipedia_url,
-          image: imageOverride || imageFromData,
-          status: st.status||sc.status||'UNKNOWN',
-          death_date: st.death_date||sc.death_date||null,
-        };
-      }).filter(k=>k.description&&k.description.length>60);
-      for (const [nm,rec] of Object.entries(STATIC)) {
-        if (!allData.find(k=>k.name===nm)) {
-          const st=KNOWN_STATUS[nm]||{};
-          allData.push({...rec,status:st.status||rec.status,death_date:st.death_date||rec.death_date});
-        }
-      }
-      renderAll(); updateStats(); markEmptyLetters();
-      return;
-    }
-  } catch(_) {}
-
   const BATCH=5;
   for (let i=0;i<KILLERS.length;i+=BATCH) {
     const settled=await Promise.allSettled(KILLERS.slice(i,i+BATCH).map(fetchKiller));
