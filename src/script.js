@@ -447,19 +447,26 @@ async function fetchKiller(name) {
     const st = KNOWN_STATUS[name] || {};
     return {...STATIC[name], status:st.status||'UNKNOWN', death_date:st.death_date||STATIC[name].death_date};
   }
-  const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`);
-  const d = await res.json();
-  if (!d.extract || d.type==='disambiguation' || d.extract.length<80) return null;
+  const localImage = resolveImagePath(LOCAL_IMAGE_OVERRIDES[name]);
+  let d = null;
+  try {
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`);
+    if (res.ok) d = await res.json();
+  } catch (_) {}
+
+  const hasUsableExtract = !!(d?.extract && d.type !== 'disambiguation' && d.extract.length >= 80);
+  if (!hasUsableExtract && !localImage) return null;
+
   const st = KNOWN_STATUS[name] || {};
   return {
     name,
     nickname:     KNOWN_NICKNAMES[name]||null,
-    years_active: extractYears(d.extract),
-    country:      extractCountry(d.extract),
+    years_active: extractYears(d?.extract),
+    country:      extractCountry(d?.extract),
     method:       KNOWN_METHODS[name]||null,
-    description:  d.extract,
-    wikipedia_url: d.content_urls?.desktop?.page||null,
-    image:        d.thumbnail?.source||resolveImagePath(LOCAL_IMAGE_OVERRIDES[name])||null,
+    description:  d?.extract || 'No Wikipedia summary available for this record.',
+    wikipedia_url: d?.content_urls?.desktop?.page||null,
+    image:        d?.thumbnail?.source||localImage||null,
     status:       st.status||'UNKNOWN',
     death_date:   st.death_date||null,
   };
