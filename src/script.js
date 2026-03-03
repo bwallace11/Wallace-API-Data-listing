@@ -13,6 +13,16 @@ const LOCAL_IMAGE_OVERRIDES = {
   "Yavuz Yapıcıoğlu": "yavuz-yapicioglu.png",
 };
 
+const KNOWN_WIKI_PAGE_TITLES = {
+  "John Joubert": "John_Joubert_(serial_killer)",
+  "Ali Kaya": "Ali_Kaya_(serial_killer)",
+};
+
+const KNOWN_WIKI_URLS = {
+  "John Joubert": "https://en.wikipedia.org/wiki/John_Joubert_(serial_killer)",
+  "Ali Kaya": "https://en.wikipedia.org/wiki/Ali_Kaya_(serial_killer)",
+};
+
 const KNOWN_STATUS = {
   "Ted Bundy":           {status:"EXECUTED",  death_date:"1989"},
   "Jeffrey Dahmer":      {status:"DECEASED",  death_date:"1994"},
@@ -430,25 +440,40 @@ function resolveImagePath(path) {
   return `${BASE_URL}images/serial-killers/${path}`;
 }
 
+function resolveLocalImageCandidates(fileName) {
+  const normalized = (fileName || '').replace(/^\/+/, '');
+  if (!normalized) return [];
+  const baseName = normalized.split('/').pop();
+  const primary = resolveImagePath(normalized);
+  const secondary = `${BASE_URL}public/images/serial-killers/${baseName}`;
+  return [...new Set([primary, secondary].filter(Boolean))];
+}
+
 async function logMissingLocalOverrideImages() {
   const checks = Object.entries(LOCAL_IMAGE_OVERRIDES).map(async ([name, file]) => {
-    const src = resolveImagePath(file);
-    if (!src || src.startsWith('http://') || src.startsWith('https://')) return;
-    try {
-      const res = await fetch(src, { cache: 'no-store' });
-      if (!res.ok) {
-        console.warn(`Missing local image for ${name}: ${src}`);
+    const candidates = resolveLocalImageCandidates(file);
+    let found = false;
+    for (const src of candidates) {
+      if (!src || src.startsWith('http://') || src.startsWith('https://')) continue;
+      try {
+        const res = await fetch(src, { cache: 'no-store' });
+        if (res.ok) {
+          found = true;
+          break;
+        }
+      } catch {
       }
-    } catch {
-      console.warn(`Could not verify local image for ${name}: ${src}`);
+    }
+    if (!found) {
+      console.warn(`Missing local image for ${name}: ${candidates.join(' | ')}`);
     }
   });
   await Promise.all(checks);
 }
 
-async function fetchWikiSummary(name) {
+async function fetchWikiSummary(title) {
   try {
-    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`);
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
     if (!res.ok) return null;
     const d = await res.json();
     if (!d || d.type === 'disambiguation') return null;
@@ -462,9 +487,9 @@ async function fetchWikiSummary(name) {
   }
 }
 
-async function fetchWikiPage(name) {
+async function fetchWikiPage(title) {
   try {
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts|pageimages|info&exintro=1&explaintext=1&inprop=url&piprop=thumbnail&pithumbsize=600&titles=${encodeURIComponent(name)}`;
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=extracts|pageimages|info&exintro=1&explaintext=1&inprop=url&piprop=thumbnail|original&pithumbsize=600&titles=${encodeURIComponent(title)}`;
     const res = await fetch(apiUrl);
     if (!res.ok) return null;
     const json = await res.json();
@@ -473,7 +498,7 @@ async function fetchWikiPage(name) {
     if (!page) return null;
     return {
       extract: page.extract || null,
-      image: page.thumbnail?.source || null,
+      image: page.thumbnail?.source || page.original?.source || null,
       url: page.fullurl || null,
     };
   } catch (_) {
@@ -488,9 +513,10 @@ async function fetchKiller(name) {
     return {...STATIC[name], status:st.status||'UNKNOWN', death_date:st.death_date||STATIC[name].death_date};
   }
 
+  const queryTitle = KNOWN_WIKI_PAGE_TITLES[name] || name;
   const [summary, page] = await Promise.all([
-    fetchWikiSummary(name),
-    fetchWikiPage(name),
+    fetchWikiSummary(queryTitle),
+    fetchWikiPage(queryTitle),
   ]);
 
   const extract = page?.extract || summary?.extract || '';
@@ -506,7 +532,7 @@ async function fetchKiller(name) {
     country:      extractCountry(extract),
     method:       KNOWN_METHODS[name]||null,
     description:  extract,
-    wikipedia_url: page?.url || summary?.url || null,
+    wikipedia_url: KNOWN_WIKI_URLS[name] || page?.url || summary?.url || null,
     image:        localImage || wikiImage,
     status:       st.status||'UNKNOWN',
     death_date:   st.death_date||null,
@@ -614,8 +640,13 @@ function buildEntry(k, rank, noBottomMargin=false) {
   const marginNote= showMargin?MARGIN_NOTES[rank%MARGIN_NOTES.length]:'';
   const showTally = rank%7===0;
 
-  const imgHtml=k.image
-    ?`<div class="photo-tape ${rot}"><img src="${esc(k.image)}" alt="${esc(k.name)}" loading="lazy"/></div>`
+  const localOverrideFile = LOCAL_IMAGE_OVERRIDES[k.name] || null;
+  const localCandidates = localOverrideFile ? resolveLocalImageCandidates(localOverrideFile) : [];
+  const primaryImage = localCandidates[0] || k.image;
+  const fallbackImage = localCandidates[1] || null;
+
+  const imgHtml=primaryImage
+    ?`<div class="photo-tape ${rot}"><img src="${esc(primaryImage)}" alt="${esc(k.name)}" loading="lazy" ${fallbackImage ? `data-fallback-src="${esc(fallbackImage)}" onerror="if(this.dataset.fallbackSrc&&this.src!==this.dataset.fallbackSrc){this.src=this.dataset.fallbackSrc;}else{this.onerror=null;}"` : ''}/></div>`
     :noPhotoSvg();
 
   const nicknameHtml=k.nickname?`<p class="entry-nickname">"${esc(k.nickname)}"</p>`:'';
