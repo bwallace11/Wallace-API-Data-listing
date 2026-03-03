@@ -3,6 +3,16 @@ console.log('📖 The Keepsake Ledger — UNHINGED EDITION');
 // ── STATIC RECORDS ────────────────────────────────────────────
 const STATIC = {};
 
+const LOCAL_IMAGE_OVERRIDES = {
+  "Colin Ireland": "colin-ireland.png",
+  "Joachim Kroll": "joachim-kroll.png",
+  "Robert Maudsley": "robert-maudsley.png",
+  "Bruce McArthur": "bruce-mcarthur.png",
+  "James Vlassakis": "james-vlassakis.png",
+  "Robert Joe Wagner": "robert-joe-wagner.png",
+  "Yavuz Yapıcıoğlu": "yavuz-yapicioglu.png",
+};
+
 const KNOWN_STATUS = {
   "Ted Bundy":           {status:"EXECUTED",  death_date:"1989"},
   "Jeffrey Dahmer":      {status:"DECEASED",  death_date:"1994"},
@@ -408,6 +418,29 @@ function extractCountry(text) {
   return null;
 }
 
+function resolveImagePath(path) {
+  if (!path) return null;
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('/')) return path;
+  if (path.startsWith('images/')) return `/${path}`;
+  return `/images/serial-killers/${path}`;
+}
+
+async function logMissingLocalOverrideImages() {
+  const checks = Object.entries(LOCAL_IMAGE_OVERRIDES).map(async ([name, file]) => {
+    const src = resolveImagePath(file);
+    if (!src || src.startsWith('http://') || src.startsWith('https://')) return;
+    try {
+      const res = await fetch(src, { method: 'HEAD' });
+      if (!res.ok) {
+        console.warn(`Missing local image for ${name}: ${src}`);
+      }
+    } catch {
+      console.warn(`Could not verify local image for ${name}: ${src}`);
+    }
+  });
+  await Promise.all(checks);
+}
+
 // ── FETCH ─────────────────────────────────────────────────────
 async function fetchKiller(name) {
   if (STATIC[name]) {
@@ -426,7 +459,7 @@ async function fetchKiller(name) {
     method:       KNOWN_METHODS[name]||null,
     description:  d.extract,
     wikipedia_url: d.content_urls?.desktop?.page||null,
-    image:        d.thumbnail?.source||null,
+    image:        d.thumbnail?.source||resolveImagePath(LOCAL_IMAGE_OVERRIDES[name])||null,
     status:       st.status||'UNKNOWN',
     death_date:   st.death_date||null,
   };
@@ -439,6 +472,8 @@ async function loadData() {
       const json = await local.json();
       allData = json.map(k => {
         const st=KNOWN_STATUS[k.name]||{}, sc=STATIC[k.name]||{};
+        const imageOverride = resolveImagePath(LOCAL_IMAGE_OVERRIDES[k.name]);
+        const imageFromData = resolveImagePath(sc.image || k.image);
         return {
           name: sc.name||k.name,
           nickname: sc.nickname||KNOWN_NICKNAMES[k.name]||null,
@@ -447,7 +482,7 @@ async function loadData() {
           method: sc.method||KNOWN_METHODS[k.name]||null,
           description: sc.description||k.description,
           wikipedia_url: sc.wikipedia_url||k.wikipedia_url,
-          image: sc.image||(k.image?.startsWith('images/')?'/'+k.image:k.image),
+          image: imageOverride || imageFromData,
           status: st.status||sc.status||'UNKNOWN',
           death_date: st.death_date||sc.death_date||null,
         };
@@ -661,5 +696,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     renderAll();
   });
   initBackToTop();
+  logMissingLocalOverrideImages();
   loadData();
 });
