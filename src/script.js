@@ -11,6 +11,7 @@ const LOCAL_IMAGE_OVERRIDES = {
   "James Vlassakis": "james-vlassakis.png",
   "Robert Joe Wagner": "robert-joe-wagner.png",
   "Yavuz Yapıcıoğlu": "yavuz-yapicioglu.png",
+  "Ali Kaya": "ali-kaya.png",
 };
 
 const KNOWN_WIKI_PAGE_TITLES = {
