@@ -8,6 +8,9 @@
   </head>
   <body>
 
+    <!-- skip to content -->
+    <a href="#dataContainer" class="skip-link">Skip to main content</a>
+
     <!-- grain -->
     <div class="grain-overlay" aria-hidden="true"></div>
     <!-- vignette -->
@@ -217,9 +220,9 @@
         <p class="ledger-subtitle">A documented record of serial homicide cases.<br>Assembled from public record. <em>Handle with discretion.</em></p>
         <p class="margin-scrawl margin-scrawl--1">they always<br>leave a pattern</p>
         <p class="margin-scrawl margin-scrawl--2">why do i keep<br>coming back here</p>
-        <div class="ledger-stats">
+        <div class="ledger-stats" aria-live="polite" aria-atomic="true">
           <span class="stat-item"><span class="stat-num" id="totalCount">—</span> entries</span>
-          <span class="stat-sep">·</span>
+          <span class="stat-sep" aria-hidden="true">·</span>
           <span class="stat-item"><span class="stat-num" id="visibleCount">—</span> shown</span>
         </div>
         <div class="coffee-ring" aria-hidden="true"></div>
@@ -248,56 +251,56 @@
       <div class="filter-inner">
         <div class="filter-row">
           <span class="filter-head">— index by name —</span>
-          <div class="az-tabs" id="azTabs">
-            <button class="az-tab active" data-letter="ALL">all</button>
-            <button class="az-tab" data-letter="A">a</button>
-            <button class="az-tab" data-letter="B">b</button>
-            <button class="az-tab" data-letter="C">c</button>
-            <button class="az-tab" data-letter="D">d</button>
-            <button class="az-tab" data-letter="E">e</button>
-            <button class="az-tab" data-letter="F">f</button>
-            <button class="az-tab" data-letter="G">g</button>
-            <button class="az-tab" data-letter="H">h</button>
-            <button class="az-tab" data-letter="I">i</button>
-            <button class="az-tab" data-letter="J">j</button>
-            <button class="az-tab" data-letter="K">k</button>
-            <button class="az-tab" data-letter="L">l</button>
-            <button class="az-tab" data-letter="M">m</button>
-            <button class="az-tab" data-letter="N">n</button>
-            <button class="az-tab" data-letter="O">o</button>
-            <button class="az-tab" data-letter="P">p</button>
-            <button class="az-tab" data-letter="Q">q</button>
-            <button class="az-tab" data-letter="R">r</button>
-            <button class="az-tab" data-letter="S">s</button>
-            <button class="az-tab" data-letter="T">t</button>
-            <button class="az-tab" data-letter="U">u</button>
-            <button class="az-tab" data-letter="V">v</button>
-            <button class="az-tab" data-letter="W">w</button>
-            <button class="az-tab" data-letter="X">x</button>
-            <button class="az-tab" data-letter="Y">y</button>
-            <button class="az-tab" data-letter="Z">z</button>
+          <div class="az-tabs" id="azTabs" role="group" aria-label="Filter by letter">
+            <button class="az-tab active" data-letter="ALL" aria-pressed="true">all</button>
+            <button class="az-tab" data-letter="A" aria-pressed="false">a</button>
+            <button class="az-tab" data-letter="B" aria-pressed="false">b</button>
+            <button class="az-tab" data-letter="C" aria-pressed="false">c</button>
+            <button class="az-tab" data-letter="D" aria-pressed="false">d</button>
+            <button class="az-tab" data-letter="E" aria-pressed="false">e</button>
+            <button class="az-tab" data-letter="F" aria-pressed="false">f</button>
+            <button class="az-tab" data-letter="G" aria-pressed="false">g</button>
+            <button class="az-tab" data-letter="H" aria-pressed="false">h</button>
+            <button class="az-tab" data-letter="I" aria-pressed="false">i</button>
+            <button class="az-tab" data-letter="J" aria-pressed="false">j</button>
+            <button class="az-tab" data-letter="K" aria-pressed="false">k</button>
+            <button class="az-tab" data-letter="L" aria-pressed="false">l</button>
+            <button class="az-tab" data-letter="M" aria-pressed="false">m</button>
+            <button class="az-tab" data-letter="N" aria-pressed="false">n</button>
+            <button class="az-tab" data-letter="O" aria-pressed="false">o</button>
+            <button class="az-tab" data-letter="P" aria-pressed="false">p</button>
+            <button class="az-tab" data-letter="Q" aria-pressed="false">q</button>
+            <button class="az-tab" data-letter="R" aria-pressed="false">r</button>
+            <button class="az-tab" data-letter="S" aria-pressed="false">s</button>
+            <button class="az-tab" data-letter="T" aria-pressed="false">t</button>
+            <button class="az-tab" data-letter="U" aria-pressed="false">u</button>
+            <button class="az-tab" data-letter="V" aria-pressed="false">v</button>
+            <button class="az-tab" data-letter="W" aria-pressed="false">w</button>
+            <button class="az-tab" data-letter="X" aria-pressed="false">x</button>
+            <button class="az-tab" data-letter="Y" aria-pressed="false">y</button>
+            <button class="az-tab" data-letter="Z" aria-pressed="false">z</button>
           </div>
         </div>
         <div class="filter-row">
           <span class="filter-head">— filter by status —</span>
-          <div class="status-tabs">
-            <button class="status-tab active" data-status="ALL">all cases</button>
-            <button class="status-tab" data-status="EXECUTED">executed</button>
-            <button class="status-tab" data-status="IN PRISON">imprisoned</button>
-            <button class="status-tab" data-status="DECEASED">deceased</button>
-            <button class="status-tab" data-status="UNIDENTIFIED">unidentified</button>
+          <div class="status-tabs" role="group" aria-label="Filter by status">
+            <button class="status-tab active" data-status="ALL" aria-pressed="true">all cases</button>
+            <button class="status-tab" data-status="EXECUTED" aria-pressed="false">executed</button>
+            <button class="status-tab" data-status="IN PRISON" aria-pressed="false">imprisoned</button>
+            <button class="status-tab" data-status="DECEASED" aria-pressed="false">deceased</button>
+            <button class="status-tab" data-status="UNIDENTIFIED" aria-pressed="false">unidentified</button>
           </div>
         </div>
         <div class="filter-row search-row">
-          <span class="filter-head">— search —</span>
-          <input type="text" id="searchInput" class="ledger-search" placeholder="write a name…" />
+          <label for="searchInput" class="filter-head">— search —</label>
+          <input type="search" id="searchInput" class="ledger-search" placeholder="write a name…" autocomplete="off" />
         </div>
       </div>
     </nav>
 
     <!-- LEDGER ENTRIES -->
-    <main class="ledger-pages" id="dataContainer">
-      <div class="loading-state">
+    <main class="ledger-pages" id="dataContainer" aria-live="polite" aria-busy="true">
+      <div class="loading-state" role="status">
         <p class="loading-text">gathering files<span class="dots">...</span></p>
       </div>
     </main>

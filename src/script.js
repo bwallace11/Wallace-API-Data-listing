@@ -572,6 +572,7 @@ function renderAll() {
   data.sort((a,b)=>sortLastName(a.name).localeCompare(sortLastName(b.name)));
 
   document.getElementById('visibleCount').textContent=data.length;
+  container.setAttribute('aria-busy', 'false');
 
   if (!data.length&&allData.length>0) {
     container.innerHTML=`<div class="empty-state"><p>— no entries found —</p></div>`;
@@ -678,7 +679,7 @@ function buildEntry(k, rank, noBottomMargin=false) {
     :'<span></span>';
 
   return `
-    <div class="entry" style="${noBottomMargin ? 'margin-bottom:0' : ''}">
+    <article class="entry" style="${noBottomMargin ? 'margin-bottom:0' : ''}" aria-label="${esc(k.name)}">
       ${marginHtml}
       ${tallyHtml}
       <div class="entry-paper">
@@ -702,7 +703,7 @@ function buildEntry(k, rank, noBottomMargin=false) {
           </div>
         </div>
       </div>
-    </div>`;
+    </article>`;
 }
 
 // ── STATS ──────────────────────────────────────────────────────
@@ -725,22 +726,27 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.az-tab').forEach(btn=>{
     btn.addEventListener('click',()=>{
       if(btn.classList.contains('empty')) return;
-      document.querySelectorAll('.az-tab').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.az-tab').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed','true');
       letterQ=btn.dataset.letter;
+      document.getElementById('dataContainer').setAttribute('aria-busy','true');
       renderAll();
     });
   });
   document.querySelectorAll('.status-tab').forEach(btn=>{
     btn.addEventListener('click',()=>{
-      document.querySelectorAll('.status-tab').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.status-tab').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed','true');
       statusQ=btn.dataset.status;
+      document.getElementById('dataContainer').setAttribute('aria-busy','true');
       renderAll();
     });
   });
   document.getElementById('searchInput').addEventListener('input',e=>{
     searchQ=e.target.value.trim();
+    document.getElementById('dataContainer').setAttribute('aria-busy','true');
     renderAll();
   });
   initBackToTop();
